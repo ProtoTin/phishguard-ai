@@ -1,0 +1,277 @@
+{
+  "email_low_risk": {
+    "content_type": "email",
+    "classification": "legitimate",
+    "risk_score": 0,
+    "calibrated_probability": 7e-06,
+    "recommended_action": "allow",
+    "guidance": "No strong phishing signal was detected; continue normal caution.",
+    "reasons": [
+      "No controlled-template warning sign was detected."
+    ],
+    "evidence": [],
+    "supporting_model_features": [
+      {
+        "feature": "word or phrase: subject",
+        "contribution": 0.114119
+      },
+      {
+        "feature": "character pattern: te\u2420",
+        "contribution": 0.041128
+      },
+      {
+        "feature": "character pattern: \u2420be",
+        "contribution": 0.026381
+      },
+      {
+        "feature": "character pattern: pro",
+        "contribution": 0.019677
+      },
+      {
+        "feature": "character pattern: \u2420pro",
+        "contribution": 0.0178
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "word or phrase: meeting",
+        "contribution": -0.220095
+      },
+      {
+        "feature": "word or phrase: project",
+        "contribution": -0.179144
+      },
+      {
+        "feature": "word or phrase: team",
+        "contribution": -0.15427
+      },
+      {
+        "feature": "word or phrase: at",
+        "contribution": -0.147845
+      },
+      {
+        "feature": "word or phrase: update",
+        "contribution": -0.144601
+      }
+    ],
+    "model_version": "0.2.0",
+    "policy_version": "1.0.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "email_high_risk": {
+    "content_type": "email",
+    "classification": "phishing",
+    "risk_score": 100,
+    "calibrated_probability": 0.999733,
+    "recommended_action": "block",
+    "guidance": "Block or isolate the content, subject to organizational review policy.",
+    "reasons": [
+      "Uses urgent or time-pressure language.",
+      "Mentions credentials, passwords, or signing in.",
+      "Requests account or identity verification.",
+      "Prompts the recipient to follow a link."
+    ],
+    "evidence": [
+      {
+        "code": "urgent_language",
+        "description": "Uses urgent or time-pressure language."
+      },
+      {
+        "code": "credential_request",
+        "description": "Mentions credentials, passwords, or signing in."
+      },
+      {
+        "code": "account_verification",
+        "description": "Requests account or identity verification."
+      },
+      {
+        "code": "link_prompt",
+        "description": "Prompts the recipient to follow a link."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "word or phrase: account",
+        "contribution": 0.512938
+      },
+      {
+        "feature": "word or phrase: click here",
+        "contribution": 0.264786
+      },
+      {
+        "feature": "word or phrase: your account",
+        "contribution": 0.253754
+      },
+      {
+        "feature": "word or phrase: your",
+        "contribution": 0.241058
+      },
+      {
+        "feature": "word or phrase: here",
+        "contribution": 0.238462
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "word or phrase: access",
+        "contribution": -0.248132
+      },
+      {
+        "feature": "word or phrase: password",
+        "contribution": -0.226453
+      },
+      {
+        "feature": "word or phrase: will be",
+        "contribution": -0.151814
+      },
+      {
+        "feature": "word or phrase: will",
+        "contribution": -0.138162
+      },
+      {
+        "feature": "word or phrase: to",
+        "contribution": -0.075217
+      }
+    ],
+    "model_version": "0.2.0",
+    "policy_version": "1.0.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_low_risk": {
+    "content_type": "url",
+    "classification": "legitimate",
+    "risk_score": 0,
+    "calibrated_probability": 0.001714,
+    "recommended_action": "allow",
+    "guidance": "No strong phishing signal was detected; continue normal caution.",
+    "reasons": [
+      "No controlled-template warning sign was detected."
+    ],
+    "evidence": [],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 6.434365
+      },
+      {
+        "feature": "URL property: dots",
+        "contribution": 0.351841
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.316673
+      },
+      {
+        "feature": "character pattern: .org/",
+        "contribution": 0.308166
+      },
+      {
+        "feature": "character pattern: org/",
+        "contribution": 0.307612
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -8.189144
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -0.425915
+      },
+      {
+        "feature": "character pattern: s://w",
+        "contribution": -0.423862
+      },
+      {
+        "feature": "character pattern: /www.",
+        "contribution": -0.283
+      },
+      {
+        "feature": "character pattern: www.",
+        "contribution": -0.282703
+      }
+    ],
+    "model_version": "0.2.0",
+    "policy_version": "1.0.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_high_risk": {
+    "content_type": "url",
+    "classification": "phishing",
+    "risk_score": 100,
+    "calibrated_probability": 1.0,
+    "recommended_action": "block",
+    "guidance": "Block or isolate the content, subject to organizational review policy.",
+    "reasons": [
+      "Uses an IP address instead of a domain name.",
+      "Does not explicitly use HTTPS.",
+      "Contains several account or credential-related terms."
+    ],
+    "evidence": [
+      {
+        "code": "ip_hostname",
+        "description": "Uses an IP address instead of a domain name."
+      },
+      {
+        "code": "no_https",
+        "description": "Does not explicitly use HTTPS."
+      },
+      {
+        "code": "suspicious_terms",
+        "description": "Contains several account or credential-related terms."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 7.760355
+      },
+      {
+        "feature": "URL property: suspicious tokens",
+        "contribution": 2.642916
+      },
+      {
+        "feature": "URL property: digits",
+        "contribution": 1.267394
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 0.984025
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.572447
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -0.567886
+      },
+      {
+        "feature": "URL property: hostname length",
+        "contribution": -0.095849
+      },
+      {
+        "feature": "character pattern: oun",
+        "contribution": -0.055234
+      },
+      {
+        "feature": "character pattern: cou",
+        "contribution": -0.048886
+      },
+      {
+        "feature": "character pattern: unt",
+        "contribution": -0.041454
+      }
+    ],
+    "model_version": "0.2.0",
+    "policy_version": "1.0.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "policy_version": "1.0.0",
+  "score_interpretation": "rounded calibrated phishing probability multiplied by 100",
+  "advisory_only": true,
+  "bands": [
+    {
+      "minimum": 0,
+      "maximum": 29,
+      "classification": "legitimate",
+      "action": "allow",
+      "guidance": "No strong phishing signal was detected; continue normal caution."
+    },
+    {
+      "minimum": 30,
+      "maximum": 59,
+      "classification": "suspicious",
+      "action": "warn",
+      "guidance": "Treat the content cautiously and verify it through a trusted channel."
+    },
+    {
+      "minimum": 60,
+      "maximum": 84,
+      "classification": "phishing",
+      "action": "quarantine",
+      "guidance": "Do not interact with the content; send it for security review."
+    },
+    {
+      "minimum": 85,
+      "maximum": 100,
+      "classification": "phishing",
+      "action": "block",
+      "guidance": "Block or isolate the content, subject to organizational review policy."
+    }
+  ],
+  "project_version": "0.2.0",
+  "calibration_method": "sigmoid fitted on validation data only",
+  "models": {
+    "email": {
+      "path": "artifacts/policy/email_calibrated.joblib",
+      "bytes": 1807564,
+      "sha256": "2cff06fc8320a4e7ded7bb67f68c05edb2630da16e20a81450a948636d66498f"
+    },
+    "url": {
+      "path": "artifacts/policy/url_calibrated.joblib",
+      "bytes": 1501597,
+      "sha256": "f4ecc0d3920db1f02d31d8c75c12b07cf2216dab2c0b4046fe2fb23c3daeac30"
+    }
+  }
+}

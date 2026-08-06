@@ -5,9 +5,9 @@ project will combine machine-learning models with deterministic security rules
 to identify suspicious messages, explain the warning signs, and recommend a
 proportionate response.
 
-> **Project status:** Phase 3 — evaluated email and URL baseline models. The
-> models are research baselines and must not be used as production security
-> controls.
+> **Project status:** Phase 4 — calibrated email and URL risk scores with
+> human-readable explanations and an advisory prevention policy. The models
+> remain research baselines and must not be used as production security controls.
 
 ## Project goals
 
@@ -74,6 +74,7 @@ Classification + score + reasons + recommended action
 - [Latest data-quality report](docs/data-quality-report.md)
 - [Model card](docs/model-card.md)
 - [Baseline evaluation](docs/model-evaluation.md)
+- [Explanation and prevention-policy evaluation](docs/explanations-and-policy.md)
 
 ## Local development
 
@@ -142,23 +143,36 @@ This trains separate email and URL classifiers, selects thresholds on validation
 data, evaluates untouched test data, and writes model artifacts under the
 Git-ignored `artifacts/` directory. Never load an untrusted model artifact.
 
+## Build the explanation and prevention policy
+
+After training the baseline models, build the validation-only sigmoid calibrators,
+versioned advisory policy, explanation examples, and evaluation report:
+
+```bash
+python scripts/build_detection_policy.py
+```
+
+The generated policy maps calibrated risk scores to `allow`, `warn`, `quarantine`,
+or `block` recommendations. These actions are advisory and are not enforced.
+
 ## Roadmap
 
-1. Define project scope and threat model
-2. Create the repository and development foundation
-3. Build a reproducible data pipeline
-4. Train and evaluate baseline email and URL models
-5. Add explanations and prevention policies
-6. Expose the detector through a secure API
-7. Build a web dashboard
-8. Test, harden, package, and deploy the system
-9. Compare the baseline with an advanced transformer or ensemble
+- [x] Define project scope and threat model
+- [x] Create the repository and development foundation
+- [x] Build a reproducible data pipeline
+- [x] Train and evaluate baseline email and URL models
+- [x] Add calibration, explanations, and prevention policies
+- [ ] Expose the detector through a secure API
+- [ ] Build a web dashboard
+- [ ] Test, harden, package, and deploy the system
+- [ ] Compare the baseline with an advanced transformer or ensemble
 
 ## Current limitations
 
 This repository currently provides a runnable API foundation, reproducible data
-pipeline, and evaluated baseline models. Prediction endpoints, explanations,
-screenshots, and a live demo will be added in later phases.
+pipeline, evaluated baseline models, calibrated risk scoring, explanations, and
+an advisory response policy. Prediction endpoints, screenshots, and a live demo
+will be added in later phases.
 
 ## Responsible use
 

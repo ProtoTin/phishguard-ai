@@ -1,0 +1,98 @@
+"""Versioned risk-score bands and advisory prevention decisions."""
+
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+from typing import Literal
+
+Classification = Literal["legitimate", "suspicious", "phishing"]
+RecommendedAction = Literal["allow", "warn", "quarantine", "block"]
+
+
+@dataclass(frozen=True)
+class PolicyBand:
+    """One inclusive risk-score band."""
+
+    minimum: int
+    maximum: int
+    classification: Classification
+    action: RecommendedAction
+    guidance: str
+
+
+@dataclass(frozen=True)
+class PolicyDecision:
+    """Advisory action produced from a calibrated probability."""
+
+    risk_score: int
+    classification: Classification
+    recommended_action: RecommendedAction
+    guidance: str
+    policy_version: str
+
+
+POLICY_VERSION = "1.0.0"
+POLICY_BANDS = (
+    PolicyBand(
+        0,
+        29,
+        "legitimate",
+        "allow",
+        "No strong phishing signal was detected; continue normal caution.",
+    ),
+    PolicyBand(
+        30,
+        59,
+        "suspicious",
+        "warn",
+        "Treat the content cautiously and verify it through a trusted channel.",
+    ),
+    PolicyBand(
+        60,
+        84,
+        "phishing",
+        "quarantine",
+        "Do not interact with the content; send it for security review.",
+    ),
+    PolicyBand(
+        85,
+        100,
+        "phishing",
+        "block",
+        "Block or isolate the content, subject to organizational review policy.",
+    ),
+)
+
+
+def risk_score(probability: float) -> int:
+    """Convert a bounded calibrated probability to an integer score."""
+
+    bounded = min(1.0, max(0.0, float(probability)))
+    return min(100, int(bounded * 100 + 0.5))
+
+
+def decide(probability: float) -> PolicyDecision:
+    """Map a calibrated probability into an advisory policy decision."""
+
+    score = risk_score(probability)
+    for band in POLICY_BANDS:
+        if band.minimum <= score <= band.maximum:
+            return PolicyDecision(
+                risk_score=score,
+                classification=band.classification,
+                recommended_action=band.action,
+                guidance=band.guidance,
+                policy_version=POLICY_VERSION,
+            )
+    raise RuntimeError(f"No policy band contains risk score {score}")
+
+
+def policy_document() -> dict[str, object]:
+    """Return the stable policy definition for JSON serialization."""
+
+    return {
+        "policy_version": POLICY_VERSION,
+        "score_interpretation": "rounded calibrated phishing probability multiplied by 100",
+        "advisory_only": True,
+        "bands": [asdict(band) for band in POLICY_BANDS],
+    }
