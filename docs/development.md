@@ -31,7 +31,8 @@ uvicorn phishguard.main:app --reload
 
 Useful local endpoints:
 
-- Service information: `http://localhost:8000/`
+- Analysis dashboard: `http://localhost:8000/`
+- Service information: `http://localhost:8000/service`
 - Health check: `http://localhost:8000/health`
 - Model readiness: `http://localhost:8000/ready`
 - Email analysis: `POST http://localhost:8000/v1/analyze/email`

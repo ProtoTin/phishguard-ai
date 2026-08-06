@@ -32,7 +32,7 @@ class FixedAnalyzer:
                 {"feature": "word or phrase: verify", "contribution": 0.42}
             ],
             "mitigating_model_features": [],
-            "model_version": "0.3.0",
+            "model_version": "0.4.0",
             "policy_version": "1.0.0",
             "advisory_only": True,
             "safety_note": "This advisory result can be wrong.",
@@ -60,24 +60,47 @@ def request(
 def test_service_info_and_health() -> None:
     application = create_app(detector=FixedAnalyzer(), settings=Settings(environment="test"))
 
-    info = request(application, "GET", "/")
+    info = request(application, "GET", "/service")
     health = request(application, "GET", "/health")
 
     assert info.status_code == 200
     assert info.json() == {
         "name": "PhishGuard API",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "status": "detection_api",
         "documentation": "/docs",
     }
     assert health.json() == {
         "status": "healthy",
         "service": "PhishGuard API",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "environment": "test",
     }
     assert health.headers["x-content-type-options"] == "nosniff"
     assert health.headers["referrer-policy"] == "no-referrer"
+
+
+def test_dashboard_and_assets_use_safe_browser_controls() -> None:
+    application = create_app(detector=FixedAnalyzer(), settings=Settings(environment="test"))
+
+    dashboard = request(application, "GET", "/")
+    stylesheet = request(application, "GET", "/assets/dashboard.css")
+    script = request(application, "GET", "/assets/dashboard.js")
+
+    assert dashboard.status_code == 200
+    assert 'id="analysis-form"' in dashboard.text
+    assert 'id="result-card"' in dashboard.text
+    assert 'content="http://test/assets/og.png"' in dashboard.text
+    assert "text/html" in dashboard.headers["content-type"]
+    assert "default-src 'self'" in dashboard.headers["content-security-policy"]
+    assert dashboard.headers["x-frame-options"] == "DENY"
+    assert stylesheet.status_code == 200
+    assert "text/css" in stylesheet.headers["content-type"]
+    assert "https://" not in stylesheet.text
+    assert script.status_code == 200
+    assert "/v1/analyze/email" in script.text
+    assert "/v1/analyze/url" in script.text
+    assert "innerHTML" not in script.text
 
 
 def test_readiness_and_analysis_routes_do_not_echo_input() -> None:
@@ -171,8 +194,10 @@ def test_missing_artifacts_return_safe_unavailable_error(tmp_path: Path) -> None
     )
     application = create_app(settings=settings)
 
+    dashboard = request(application, "GET", "/")
     response = request(application, "GET", "/ready")
 
+    assert dashboard.status_code == 200
     assert response.status_code == 503
     body: dict[str, Any] = response.json()
     assert body == {

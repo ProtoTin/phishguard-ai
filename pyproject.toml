@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phishguard-ai"
-version = "0.3.0"
+version = "0.4.0"
 description = "An explainable AI phishing detection and prevention system"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -44,6 +44,9 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+phishguard = ["static/*"]
 
 [tool.pytest.ini_options]
 addopts = "--strict-config --strict-markers --cov=phishguard --cov-report=term-missing --cov-fail-under=90"

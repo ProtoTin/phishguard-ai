@@ -2,10 +2,13 @@
 
 ## Purpose
 
-PhishGuard 0.3.0 exposes calibrated email-text and URL analysis through FastAPI.
+PhishGuard 0.4.0 exposes calibrated email-text and URL analysis through FastAPI.
 All submitted values are treated as untrusted plain text. URL analysis is fully
 offline: the service does not resolve, retrieve, or visit the submitted address.
 Results are advisory and may be incorrect.
+
+The same endpoints power the dashboard at `/`; `/service` returns machine-readable
+service information.
 
 ## Before starting
 

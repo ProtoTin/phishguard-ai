@@ -5,8 +5,10 @@ project will combine machine-learning models with deterministic security rules
 to identify suspicious messages, explain the warning signs, and recommend a
 proportionate response.
 
-> **Project status:** Phase 5 — secure, bounded email and URL analysis API backed
-> by verified model artifacts, calibrated scores, human-readable explanations,
+![PhishGuard — Explainable phishing analysis](src/phishguard/static/og.png)
+
+> **Project status:** Phase 6 — responsive analysis dashboard connected to the
+> secure email and URL API, verified model artifacts, calibrated explanations,
 > and advisory actions. The models remain research baselines.
 
 ## Project goals
@@ -19,7 +21,7 @@ proportionate response.
 - Demonstrate reproducible ML, secure API design, automated tests, and
   deployment practices in a portfolio-ready project.
 
-## Planned user experience
+## User experience
 
 1. A user pastes an email or URL into the web interface.
 2. The service safely parses the submitted content.
@@ -47,7 +49,7 @@ proportionate response.
 - Automated blocking will not be enabled until performance and false-positive
   behavior are evaluated.
 
-## Planned architecture
+## Architecture
 
 ```text
 Web interface
@@ -76,6 +78,7 @@ Classification + score + reasons + recommended action
 - [Baseline evaluation](docs/model-evaluation.md)
 - [Explanation and prevention-policy evaluation](docs/explanations-and-policy.md)
 - [API guide](docs/api.md)
+- [Dashboard guide](docs/dashboard.md)
 
 ## Local development
 
@@ -95,10 +98,10 @@ python -m pip install -e ".[dev]"
 uvicorn phishguard.main:app --reload
 ```
 
-Open `http://localhost:8000/docs` for the interactive API documentation or
-request `http://localhost:8000/ready` to verify that the hashed model artifacts
-are loaded. The data, model-training, and policy-build steps below must be run
-before the analysis routes are ready.
+Open `http://localhost:8000/` for the analysis dashboard, `/docs` for interactive
+API documentation, or `/ready` to verify that the hashed model artifacts are
+loaded. The data, model-training, and policy-build steps below must be run before
+analysis is ready.
 
 ### Run the checks
 
@@ -166,16 +169,16 @@ or `block` recommendations. These actions are advisory and are not enforced.
 - [x] Train and evaluate baseline email and URL models
 - [x] Add calibration, explanations, and prevention policies
 - [x] Expose the detector through a secure API
-- [ ] Build a web dashboard
+- [x] Build a responsive web dashboard
 - [ ] Test, harden, package, and deploy the system
 - [ ] Compare the baseline with an advanced transformer or ensemble
 
 ## Current limitations
 
-This repository now provides offline email and URL prediction endpoints with
-bounded inputs, verified artifacts, calibrated risk scoring, explanations, and
-an advisory response policy. Authentication, distributed rate limiting,
-screenshots, a web dashboard, and a live demo will be added in later phases.
+This repository now provides a responsive dashboard and offline email and URL
+prediction endpoints with bounded inputs, verified artifacts, calibrated risk
+scoring, explanations, and an advisory response policy. Authentication,
+distributed rate limiting, public hosting, and a live demo remain later phases.
 
 ## Responsible use
 

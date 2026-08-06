@@ -1,9 +1,12 @@
 """FastAPI application entry point with bounded offline analysis routes."""
 
 from collections.abc import Awaitable, Callable
+from html import escape
+from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.responses import Response
+from fastapi.responses import HTMLResponse, Response
+from fastapi.staticfiles import StaticFiles
 
 from phishguard import __version__
 from phishguard.config import Settings, get_settings
@@ -18,6 +21,8 @@ from phishguard.schemas import (
     ServiceInfoResponse,
     URLAnalysisRequest,
 )
+
+STATIC_DIRECTORY = Path(__file__).with_name("static")
 
 
 def create_app(detector: Analyzer | None = None, settings: Settings | None = None) -> FastAPI:
@@ -42,6 +47,7 @@ def create_app(detector: Analyzer | None = None, settings: Settings | None = Non
         RequestBodyLimitMiddleware,
         max_bytes=runtime_settings.max_request_bytes,
     )
+    application.mount("/assets", StaticFiles(directory=STATIC_DIRECTORY), name="assets")
 
     @application.middleware("http")
     async def security_controls(
@@ -53,8 +59,16 @@ def create_app(detector: Analyzer | None = None, settings: Settings | None = Non
         response = await call_next(request)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
         if request.url.path.startswith("/v1/analyze/"):
             response.headers["Cache-Control"] = "no-store"
+        if request.url.path == "/" or request.url.path.startswith("/assets/"):
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; script-src 'self'; style-src 'self'; "
+                "img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; "
+                "frame-ancestors 'none'; form-action 'self'"
+            )
         return response
 
     def require_detector(request: Request) -> Analyzer:
@@ -69,7 +83,16 @@ def create_app(detector: Analyzer | None = None, settings: Settings | None = Non
                 detail="Detection models are unavailable; build and verify local artifacts first",
             ) from None
 
-    @application.get("/", response_model=ServiceInfoResponse, tags=["service"])
+    @application.get("/", response_class=HTMLResponse, include_in_schema=False)
+    def dashboard(request: Request) -> HTMLResponse:
+        """Serve the local privacy-preserving analysis dashboard."""
+
+        html = STATIC_DIRECTORY.joinpath("dashboard.html").read_text(encoding="utf-8")
+        origin = escape(str(request.base_url).rstrip("/"), quote=True)
+        html = html.replace("__ORIGIN__", origin)
+        return HTMLResponse(html)
+
+    @application.get("/service", response_model=ServiceInfoResponse, tags=["service"])
     def service_info() -> ServiceInfoResponse:
         """Return public service metadata."""
 

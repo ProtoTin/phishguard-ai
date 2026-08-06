@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#071812">
+    <meta
+      name="description"
+      content="PhishGuard analyzes suspicious email text and URLs offline, then explains the risk."
+    >
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PhishGuard — Explainable phishing analysis">
+    <meta
+      property="og:description"
+      content="Inspect suspicious content before it earns your trust."
+    >
+    <meta property="og:image" content="__ORIGIN__/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PhishGuard — Explainable phishing analysis">
+    <meta
+      name="twitter:description"
+      content="Inspect suspicious content before it earns your trust."
+    >
+    <meta name="twitter:image" content="__ORIGIN__/assets/og.png">
+    <title>PhishGuard — Explainable phishing analysis</title>
+    <link rel="stylesheet" href="/assets/dashboard.css">
+    <script src="/assets/dashboard.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#analyzer">Skip to analyzer</a>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="PhishGuard home">
+        <span class="brand-mark" aria-hidden="true"><span>PG</span></span>
+        <span>
+          <strong>PhishGuard</strong>
+          <small>Explainable threat analysis</small>
+        </span>
+      </a>
+      <nav aria-label="Project links">
+        <a href="/docs">API docs</a>
+        <a href="/service">Service status</a>
+        <span class="build-pill"><span aria-hidden="true"></span> v0.4.0</span>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span aria-hidden="true">◆</span> Defensive AI project</p>
+          <h1 id="hero-title">Inspect suspicious content <em>before</em> it earns your trust.</h1>
+          <p class="hero-intro">
+            Paste an email or URL. PhishGuard scores the risk, surfaces the warning signs,
+            and recommends a safer next step—without visiting links or retaining submissions.
+          </p>
+          <div class="trust-row" aria-label="Safety properties">
+            <span><i aria-hidden="true"></i> Offline URL analysis</span>
+            <span><i aria-hidden="true"></i> No raw-content storage</span>
+            <span><i aria-hidden="true"></i> Advisory results</span>
+          </div>
+        </div>
+
+        <aside class="signal-card" aria-labelledby="signal-title">
+          <div class="signal-card-top">
+            <div>
+              <p class="mini-label">Detection layers</p>
+              <h2 id="signal-title">What gets checked</h2>
+            </div>
+            <span class="live-chip"><span></span> Models ready</span>
+          </div>
+          <ol class="signal-list">
+            <li>
+              <span class="signal-index">01</span>
+              <div><strong>Language patterns</strong><small>Urgency, credentials, payment cues</small></div>
+              <span class="signal-state">Active</span>
+            </li>
+            <li>
+              <span class="signal-index">02</span>
+              <div><strong>URL structure</strong><small>Host, encoding, tokens, entropy</small></div>
+              <span class="signal-state">Offline</span>
+            </li>
+            <li>
+              <span class="signal-index">03</span>
+              <div><strong>ML evidence</strong><small>Calibrated linear-model signals</small></div>
+              <span class="signal-state">Explainable</span>
+            </li>
+          </ol>
+          <p class="signal-footnote">
+            <span aria-hidden="true">↳</span> URLs are parsed as text and never opened.
+          </p>
+        </aside>
+      </section>
+
+      <section class="workspace" id="analyzer" aria-labelledby="workspace-title">
+        <div class="workspace-heading">
+          <div>
+            <p class="eyebrow">Analysis workspace</p>
+            <h2 id="workspace-title">What would you like to inspect?</h2>
+          </div>
+          <p><span class="privacy-dot" aria-hidden="true"></span> Processed in memory · discarded after analysis</p>
+        </div>
+
+        <div class="analyzer-grid">
+          <form class="analyzer-card" id="analysis-form" novalidate>
+            <div class="mode-tabs" role="tablist" aria-label="Content type">
+              <button
+                class="mode-tab active"
+                id="email-tab"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="analysis-panel"
+                data-mode="email"
+              >
+                <span class="tab-icon" aria-hidden="true">@</span>
+                Email content
+              </button>
+              <button
+                class="mode-tab"
+                id="url-tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="analysis-panel"
+                data-mode="url"
+              >
+                <span class="tab-icon" aria-hidden="true">↗</span>
+                Website URL
+              </button>
+            </div>
+
+            <div id="analysis-panel" role="tabpanel" aria-labelledby="email-tab">
+              <div class="field-header">
+                <label id="input-label" for="analysis-input">Paste the email subject and body</label>
+                <button class="example-button" id="example-button" type="button">Use an example</button>
+              </div>
+              <textarea
+                id="analysis-input"
+                name="content"
+                rows="11"
+                maxlength="50000"
+                placeholder="Subject: Urgent account warning&#10;&#10;We detected unusual activity. Click here to verify your password immediately..."
+                aria-describedby="input-help character-count"
+                required
+              ></textarea>
+              <div class="field-meta">
+                <span id="input-help">Plain text only. HTML is analyzed, never rendered.</span>
+                <span id="character-count">0 / 50,000</span>
+              </div>
+            </div>
+
+            <div class="form-message" id="form-message" role="alert" aria-live="polite"></div>
+            <button class="analyze-button" id="analyze-button" type="submit">
+              <span class="button-label">Analyze risk</span>
+              <span class="button-arrow" aria-hidden="true">→</span>
+            </button>
+            <p class="advisory-note">
+              <span aria-hidden="true">i</span>
+              This tool supports human judgment; it does not prove content is safe or malicious.
+            </p>
+          </form>
+
+          <aside class="empty-result" id="empty-result" aria-labelledby="empty-title">
+            <div class="radar" aria-hidden="true">
+              <span class="radar-ring ring-one"></span>
+              <span class="radar-ring ring-two"></span>
+              <span class="radar-ring ring-three"></span>
+              <span class="radar-sweep"></span>
+              <span class="radar-core">PG</span>
+            </div>
+            <p class="mini-label">Awaiting analysis</p>
+            <h3 id="empty-title">Your risk report will appear here.</h3>
+            <p>
+              You’ll see a calibrated score, detected warning signs, and the safest recommended
+              action.
+            </p>
+            <div class="empty-scale" aria-hidden="true">
+              <span>Allow</span><span>Warn</span><span>Quarantine</span><span>Block</span>
+            </div>
+          </aside>
+
+          <article class="result-card" id="result-card" tabindex="-1" aria-live="polite" hidden>
+            <div class="result-summary">
+              <div class="risk-gauge" id="risk-gauge" aria-label="Risk score">
+                <div>
+                  <strong id="risk-score">0</strong>
+                  <span>/ 100</span>
+                </div>
+              </div>
+              <div class="result-verdict">
+                <p class="mini-label">Analysis complete</p>
+                <span class="verdict-badge" id="classification">Unknown</span>
+                <h3 id="action-title">Review the result</h3>
+                <p id="guidance"></p>
+              </div>
+            </div>
+
+            <section class="reason-section" aria-labelledby="reason-title">
+              <div class="section-title-row">
+                <h4 id="reason-title">Why this result</h4>
+                <span id="evidence-count">0 signals</span>
+              </div>
+              <ul class="reason-list" id="reason-list"></ul>
+            </section>
+
+            <details class="model-details">
+              <summary>View model-level signals <span aria-hidden="true">＋</span></summary>
+              <div class="feature-columns">
+                <div>
+                  <h4>Raises risk</h4>
+                  <ul id="supporting-features"></ul>
+                </div>
+                <div>
+                  <h4>Lowers risk</h4>
+                  <ul id="mitigating-features"></ul>
+                </div>
+              </div>
+            </details>
+
+            <footer class="result-footer">
+              <span id="result-version">Model — · Policy —</span>
+              <button type="button" id="new-analysis">New analysis</button>
+            </footer>
+          </article>
+        </div>
+      </section>
+
+      <section class="method-strip" aria-label="Project highlights">
+        <div><span>01</span><strong>Private by design</strong><p>Raw submissions are not stored.</p></div>
+        <div><span>02</span><strong>Measured honestly</strong><p>False positives and dataset shift are documented.</p></div>
+        <div><span>03</span><strong>Explainable output</strong><p>Rules and model features stay distinct.</p></div>
+        <div><span>04</span><strong>Defense, not certainty</strong><p>Every action remains advisory.</p></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>PhishGuard</strong>
+        <span>Defensive security research · Portfolio project</span>
+      </div>
+      <p>Built with FastAPI, scikit-learn, and a healthy respect for false positives.</p>
+    </footer>
+  </body>
+</html>

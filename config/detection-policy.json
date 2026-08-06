@@ -32,13 +32,13 @@
       "guidance": "Block or isolate the content, subject to organizational review policy."
     }
   ],
-  "project_version": "0.3.0",
+  "project_version": "0.4.0",
   "calibration_method": "sigmoid fitted on validation data only",
   "models": {
     "email": {
       "path": "artifacts/policy/email_calibrated.joblib",
       "bytes": 1807564,
-      "sha256": "b054816620fce6e93a36ee09fa0e681701e63bbbcde24d4438ca4ed6b2336c5a"
+      "sha256": "adeba2b690fd993718686116c1d756ff3c606c81c126a4ff5b98c4d622beff72"
     },
     "url": {
       "path": "artifacts/policy/url_calibrated.joblib",
