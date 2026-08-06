@@ -5,9 +5,9 @@ project will combine machine-learning models with deterministic security rules
 to identify suspicious messages, explain the warning signs, and recommend a
 proportionate response.
 
-> **Project status:** Phase 4 — calibrated email and URL risk scores with
-> human-readable explanations and an advisory prevention policy. The models
-> remain research baselines and must not be used as production security controls.
+> **Project status:** Phase 5 — secure, bounded email and URL analysis API backed
+> by verified model artifacts, calibrated scores, human-readable explanations,
+> and advisory actions. The models remain research baselines.
 
 ## Project goals
 
@@ -75,6 +75,7 @@ Classification + score + reasons + recommended action
 - [Model card](docs/model-card.md)
 - [Baseline evaluation](docs/model-evaluation.md)
 - [Explanation and prevention-policy evaluation](docs/explanations-and-policy.md)
+- [API guide](docs/api.md)
 
 ## Local development
 
@@ -95,7 +96,9 @@ uvicorn phishguard.main:app --reload
 ```
 
 Open `http://localhost:8000/docs` for the interactive API documentation or
-request `http://localhost:8000/health` to verify the service.
+request `http://localhost:8000/ready` to verify that the hashed model artifacts
+are loaded. The data, model-training, and policy-build steps below must be run
+before the analysis routes are ready.
 
 ### Run the checks
 
@@ -162,17 +165,17 @@ or `block` recommendations. These actions are advisory and are not enforced.
 - [x] Build a reproducible data pipeline
 - [x] Train and evaluate baseline email and URL models
 - [x] Add calibration, explanations, and prevention policies
-- [ ] Expose the detector through a secure API
+- [x] Expose the detector through a secure API
 - [ ] Build a web dashboard
 - [ ] Test, harden, package, and deploy the system
 - [ ] Compare the baseline with an advanced transformer or ensemble
 
 ## Current limitations
 
-This repository currently provides a runnable API foundation, reproducible data
-pipeline, evaluated baseline models, calibrated risk scoring, explanations, and
-an advisory response policy. Prediction endpoints, screenshots, and a live demo
-will be added in later phases.
+This repository now provides offline email and URL prediction endpoints with
+bounded inputs, verified artifacts, calibrated risk scoring, explanations, and
+an advisory response policy. Authentication, distributed rate limiting,
+screenshots, a web dashboard, and a live demo will be added in later phases.
 
 ## Responsible use
 

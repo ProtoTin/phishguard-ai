@@ -193,15 +193,15 @@ be one layer in a broader security process.
 
 Before a public deployment:
 
-- [ ] Confirm the analysis path performs no outbound requests
+- [x] Confirm the analysis path performs no outbound requests
 - [ ] Enforce request-size, rate, and processing-time limits
 - [ ] Escape or sanitize every displayed user-controlled value
-- [ ] Verify raw input is absent from normal logs
+- [x] Verify raw input is absent from normal logs
 - [ ] Run unit, integration, malformed-input, and adversarial tests
 - [ ] Scan dependencies, containers, and repository history for secrets
 - [ ] Require authentication for administrative capabilities
-- [ ] Verify model artifacts and feature-schema compatibility at startup
-- [ ] Document evaluated thresholds and false-positive tradeoffs
+- [x] Verify model artifact hashes and project-policy compatibility before inference
+- [x] Document evaluated thresholds and false-positive tradeoffs
 - [ ] Provide a clear reporting path for security issues
 
 This threat model will be updated whenever a new trust boundary is introduced,

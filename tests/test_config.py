@@ -15,6 +15,7 @@ def test_settings_defaults(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> N
 
     assert settings.app_name == "PhishGuard API"
     assert settings.environment == "development"
+    assert settings.max_request_bytes == 65_536
 
 
 def test_settings_reads_prefixed_environment(

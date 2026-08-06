@@ -7,7 +7,7 @@ WORKDIR /build
 
 COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
-RUN python -m pip wheel --wheel-dir /wheels .
+RUN python -m pip wheel --wheel-dir /wheels ".[ml]"
 
 FROM python:3.12-slim AS runtime
 
@@ -27,9 +27,12 @@ RUN python -m pip install /wheels/*.whl \
 USER phishguard
 WORKDIR /home/phishguard
 
+COPY --chown=phishguard:phishguard config/detection-policy.json ./config/detection-policy.json
+COPY --chown=phishguard:phishguard reports/model-evaluation.json ./reports/model-evaluation.json
+
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"]
+  CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=2)"]
 
 CMD ["uvicorn", "phishguard.main:app", "--host", "0.0.0.0", "--port", "8000"]

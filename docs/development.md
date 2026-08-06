@@ -33,11 +33,15 @@ Useful local endpoints:
 
 - Service information: `http://localhost:8000/`
 - Health check: `http://localhost:8000/health`
+- Model readiness: `http://localhost:8000/ready`
+- Email analysis: `POST http://localhost:8000/v1/analyze/email`
+- URL analysis: `POST http://localhost:8000/v1/analyze/url`
 - Interactive API documentation: `http://localhost:8000/docs`
 - OpenAPI schema: `http://localhost:8000/openapi.json`
 
-The Phase 1 service contains operational endpoints only. Detection endpoints
-will be introduced after the data and baseline-model phases.
+Run the data preparation, model training, and detection-policy build before using
+the readiness or analysis endpoints. See the API guide for example requests and
+safe error behavior.
 
 ## Quality checks
 
@@ -66,6 +70,9 @@ Build and start the API:
 ```bash
 docker compose up --build
 ```
+
+The Compose service mounts the locally generated, Git-ignored `artifacts/`
+directory read-only. Build the models and policy on the host before starting it.
 
 Stop it with:
 

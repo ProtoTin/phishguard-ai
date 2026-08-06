@@ -54,7 +54,7 @@
         "contribution": -0.144601
       }
     ],
-    "model_version": "0.2.0",
+    "model_version": "0.3.0",
     "policy_version": "1.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
@@ -134,7 +134,7 @@
         "contribution": -0.075217
       }
     ],
-    "model_version": "0.2.0",
+    "model_version": "0.3.0",
     "policy_version": "1.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
@@ -194,7 +194,7 @@
         "contribution": -0.282703
       }
     ],
-    "model_version": "0.2.0",
+    "model_version": "0.3.0",
     "policy_version": "1.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
@@ -269,7 +269,7 @@
         "contribution": -0.041454
       }
     ],
-    "model_version": "0.2.0",
+    "model_version": "0.3.0",
     "policy_version": "1.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."

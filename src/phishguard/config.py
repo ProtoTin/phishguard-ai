@@ -1,6 +1,7 @@
 """Application configuration loaded from environment variables."""
 
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -18,6 +19,9 @@ class Settings(BaseSettings):
 
     app_name: str = "PhishGuard API"
     environment: Literal["development", "test", "production"] = "development"
+    model_report_path: Path = Path("reports/model-evaluation.json")
+    policy_path: Path = Path("config/detection-policy.json")
+    max_request_bytes: int = 65_536
 
 
 @lru_cache

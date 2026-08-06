@@ -1,6 +1,6 @@
 {
   "report_version": 1,
-  "project_version": "0.2.0",
+  "project_version": "0.3.0",
   "policy": {
     "policy_version": "1.0.0",
     "score_interpretation": "rounded calibrated phishing probability multiplied by 100",
@@ -140,7 +140,7 @@
       "artifact": {
         "path": "artifacts/policy/email_calibrated.joblib",
         "bytes": 1807564,
-        "sha256": "2cff06fc8320a4e7ded7bb67f68c05edb2630da16e20a81450a948636d66498f"
+        "sha256": "b054816620fce6e93a36ee09fa0e681701e63bbbcde24d4438ca4ed6b2336c5a"
       }
     },
     "url": {

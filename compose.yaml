@@ -7,6 +7,8 @@ services:
     init: true
     ports:
       - "8000:8000"
+    volumes:
+      - ./artifacts:/home/phishguard/artifacts:ro
     read_only: true
     tmpfs:
       - /tmp
