@@ -5,9 +5,8 @@ project will combine machine-learning models with deterministic security rules
 to identify suspicious messages, explain the warning signs, and recommend a
 proportionate response.
 
-> **Project status:** Phase 1 — development foundation established. The
-> detector is not implemented yet and must not be used as a production security
-> control.
+> **Project status:** Phase 2 — reproducible data pipeline. The detector is not
+> implemented yet and must not be used as a production security control.
 
 ## Project goals
 
@@ -70,6 +69,8 @@ Classification + score + reasons + recommended action
 - [Project scope](docs/project-scope.md)
 - [Threat model](docs/threat-model.md)
 - [Development guide](docs/development.md)
+- [Data card](docs/data-card.md)
+- [Latest data-quality report](docs/data-quality-report.md)
 
 ## Local development
 
@@ -109,6 +110,22 @@ docker compose up --build
 
 The API will be available at `http://localhost:8000`.
 
+## Reproduce the dataset
+
+Install the data-pipeline dependency, download the pinned source files, and
+prepare the normalized splits:
+
+```bash
+python -m pip install -e ".[data]"
+python scripts/download_data.py
+python scripts/prepare_data.py
+```
+
+Downloaded source data and processed records remain outside Git. The source
+manifest, attribution, checksums, data card, and aggregate quality report are
+versioned in the repository. The pipeline never opens or visits URLs contained
+inside the datasets.
+
 ## Roadmap
 
 1. Define project scope and threat model
@@ -123,10 +140,9 @@ The API will be available at `http://localhost:8000`.
 
 ## Current limitations
 
-This repository currently provides a runnable API foundation and planning
-documentation. It does not contain a detector yet. Dataset selection, model
-evaluation results, screenshots, and a live demo will be added as their
-corresponding phases are completed.
+This repository currently provides a runnable API foundation and reproducible
+data pipeline. It does not contain a detector yet. Model evaluation results,
+screenshots, and a live demo will be added in later phases.
 
 ## Responsible use
 

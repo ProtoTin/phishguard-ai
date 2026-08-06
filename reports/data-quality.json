@@ -1,0 +1,94 @@
+{
+  "report_version": 1,
+  "sources": {
+    "zenodo_curated_enron_2023": {
+      "raw_rows": 29767,
+      "accepted_rows": 29767,
+      "retained_rows": 29379,
+      "excluded_labels": 0,
+      "empty_rows": 0,
+      "title": "Phishing Email Curated Datasets \u2014 Enron.csv",
+      "content_type": "email",
+      "role": "development",
+      "license": "CC BY 4.0",
+      "landing_page": "https://zenodo.org/records/8339691"
+    },
+    "zenodo_social_engineering_2025": {
+      "raw_rows": 624,
+      "accepted_rows": 288,
+      "retained_rows": 287,
+      "excluded_labels": 336,
+      "empty_rows": 0,
+      "title": "Multiclass NLP Dataset for Phishing and Social Engineering Threat Detection",
+      "content_type": "email",
+      "role": "development",
+      "license": "CC BY 4.0",
+      "landing_page": "https://zenodo.org/records/15235123"
+    },
+    "zenodo_phishing_validation_2024": {
+      "raw_rows": 2000,
+      "accepted_rows": 2000,
+      "retained_rows": 100,
+      "excluded_labels": 0,
+      "empty_rows": 0,
+      "title": "Phishing validation emails dataset",
+      "content_type": "email",
+      "role": "external_test",
+      "license": "CC BY 4.0",
+      "landing_page": "https://zenodo.org/records/13474746"
+    },
+    "uci_phiusiil_2024": {
+      "raw_rows": 235795,
+      "accepted_rows": 235795,
+      "retained_rows": 231340,
+      "excluded_labels": 0,
+      "empty_rows": 0,
+      "title": "PhiUSIIL Phishing URL (Website) Dataset",
+      "content_type": "url",
+      "role": "development",
+      "license": "CC BY 4.0",
+      "landing_page": "https://archive.ics.uci.edu/dataset/967/phiusil-phishing-url-dataset"
+    }
+  },
+  "deduplication": {
+    "same_label_duplicates_removed": 6658,
+    "conflicting_fingerprints_removed": 43
+  },
+  "processed": {
+    "schema_version": 1,
+    "seed": 20260806,
+    "total_records": 261106,
+    "splits": {
+      "train": {
+        "email:legitimate": 12383,
+        "email:phishing": 11250,
+        "url:legitimate": 94254,
+        "url:phishing": 67263
+      },
+      "validation": {
+        "email:legitimate": 3222,
+        "email:phishing": 2811,
+        "url:legitimate": 20143,
+        "url:phishing": 14537
+      },
+      "test": {
+        "url:legitimate": 20410,
+        "url:phishing": 14733
+      },
+      "external_test": {
+        "email:legitimate": 77,
+        "email:phishing": 23
+      }
+    },
+    "fields": [
+      "id",
+      "content_type",
+      "text",
+      "label",
+      "source",
+      "source_record_id",
+      "group_id",
+      "split"
+    ]
+  }
+}

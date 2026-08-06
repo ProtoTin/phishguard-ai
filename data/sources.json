@@ -1,0 +1,101 @@
+{
+  "manifest_version": 1,
+  "sources": [
+    {
+      "id": "zenodo_curated_enron_2023",
+      "title": "Phishing Email Curated Datasets — Enron.csv",
+      "content_type": "email",
+      "role": "development",
+      "format": "curated_email_csv",
+      "url": "https://zenodo.org/api/records/8339691/files/Enron.csv/content",
+      "filename": "Enron.csv",
+      "expected_bytes": 44837129,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "10489e0fdcc8af6fe62135c689367d40",
+        "provenance": "publisher"
+      },
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "landing_page": "https://zenodo.org/records/8339691",
+      "citation": "Champa, Rabbi, and Zibran (2024), DOI: 10.1109/ICMI60790.2024.10585821",
+      "label_mapping": {
+        "0": "legitimate",
+        "1": "phishing"
+      },
+      "split_policy": "train_validation"
+    },
+    {
+      "id": "zenodo_social_engineering_2025",
+      "title": "Multiclass NLP Dataset for Phishing and Social Engineering Threat Detection",
+      "content_type": "email",
+      "role": "development",
+      "format": "zenodo_tsv_in_xlsx",
+      "url": "https://zenodo.org/api/records/15235123/files/phishing_nlp_dataset.xlsx/content",
+      "filename": "phishing_nlp_dataset.xlsx",
+      "expected_bytes": 51291,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "7213a3ee515a713f4eee2a6948f1756e",
+        "provenance": "publisher"
+      },
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "landing_page": "https://zenodo.org/records/15235123",
+      "citation": "Engineering Ingegneria Informatica Spa (2025), DOI: 10.5281/zenodo.15235123",
+      "label_mapping": {
+        "Phishing": "phishing",
+        "NOT-Malicious General Class": "legitimate"
+      },
+      "split_policy": "train_validation"
+    },
+    {
+      "id": "zenodo_phishing_validation_2024",
+      "title": "Phishing validation emails dataset",
+      "content_type": "email",
+      "role": "external_test",
+      "format": "zenodo_validation_csv",
+      "url": "https://zenodo.org/api/records/13474746/files/Phishing_validation_emails.csv/content",
+      "filename": "Phishing_validation_emails.csv",
+      "expected_bytes": 203107,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "1bf8ec0fe3f67e12dd275ce5b2b91b69",
+        "provenance": "publisher"
+      },
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "landing_page": "https://zenodo.org/records/13474746",
+      "citation": "Miltchev, Rangelov, and Genchev (2024), DOI: 10.5281/zenodo.13474746",
+      "label_mapping": {
+        "Phishing Email": "phishing",
+        "Safe Email": "legitimate"
+      },
+      "split_policy": "external_test"
+    },
+    {
+      "id": "uci_phiusiil_2024",
+      "title": "PhiUSIIL Phishing URL (Website) Dataset",
+      "content_type": "url",
+      "role": "development",
+      "format": "uci_phiusiil_zip_csv",
+      "url": "https://archive.ics.uci.edu/static/public/967/phiusiil%2Bphishing%2Burl%2Bdataset.zip",
+      "filename": "phiusiil_phishing_url_dataset.zip",
+      "expected_bytes": 15376007,
+      "checksum": {
+        "algorithm": "sha256",
+        "value": "0a639fd03aea6308c5b1c10c92aa23c2ce1505447a9137271865cd0badc9a59a",
+        "provenance": "project-pinned-2026-08-06"
+      },
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "landing_page": "https://archive.ics.uci.edu/dataset/967/phiusil-phishing-url-dataset",
+      "citation": "Prasad and Chandra (2024), UCI Machine Learning Repository",
+      "label_mapping": {
+        "0": "phishing",
+        "1": "legitimate"
+      },
+      "split_policy": "train_validation_test"
+    }
+  ]
+}
