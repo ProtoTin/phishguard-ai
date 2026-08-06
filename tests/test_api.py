@@ -24,7 +24,7 @@ def test_service_info() -> None:
     assert response.status_code == 200
     assert response.json() == {
         "name": "PhishGuard API",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "status": "foundation_only",
         "documentation": "/docs",
     }
@@ -37,6 +37,6 @@ def test_health_check() -> None:
     assert response.json() == {
         "status": "healthy",
         "service": "PhishGuard API",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "environment": "development",
     }

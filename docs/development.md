@@ -46,7 +46,7 @@ Run the same checks used by continuous integration:
 ```bash
 ruff check .
 ruff format --check .
-mypy src
+mypy src tests
 pytest
 ```
 

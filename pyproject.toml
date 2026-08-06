@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phishguard-ai"
-version = "0.1.0"
+version = "0.2.0"
 description = "An explainable AI phishing detection and prevention system"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -28,6 +28,9 @@ dependencies = [
 data = [
   "openpyxl>=3.1,<4.0",
 ]
+ml = [
+  "scikit-learn>=1.9,<2.0",
+]
 dev = [
   "httpx>=0.28,<1.0",
   "mypy>=1.15,<2.0",
@@ -35,6 +38,7 @@ dev = [
   "pytest>=8.3,<10.0",
   "pytest-cov>=6.0,<8.0",
   "ruff>=0.11,<1.0",
+  "scikit-learn>=1.9,<2.0",
   "types-openpyxl>=3.1,<4.0",
 ]
 
@@ -71,3 +75,7 @@ select = ["E", "F", "I", "N", "S", "UP", "W"]
 python_version = "3.12"
 strict = true
 packages = ["phishguard"]
+
+[[tool.mypy.overrides]]
+module = ["joblib.*", "scipy.*", "sklearn.*"]
+ignore_missing_imports = true

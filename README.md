@@ -5,8 +5,9 @@ project will combine machine-learning models with deterministic security rules
 to identify suspicious messages, explain the warning signs, and recommend a
 proportionate response.
 
-> **Project status:** Phase 2 — reproducible data pipeline. The detector is not
-> implemented yet and must not be used as a production security control.
+> **Project status:** Phase 3 — evaluated email and URL baseline models. The
+> models are research baselines and must not be used as production security
+> controls.
 
 ## Project goals
 
@@ -71,6 +72,8 @@ Classification + score + reasons + recommended action
 - [Development guide](docs/development.md)
 - [Data card](docs/data-card.md)
 - [Latest data-quality report](docs/data-quality-report.md)
+- [Model card](docs/model-card.md)
+- [Baseline evaluation](docs/model-evaluation.md)
 
 ## Local development
 
@@ -98,7 +101,7 @@ request `http://localhost:8000/health` to verify the service.
 ```bash
 ruff check .
 ruff format --check .
-mypy src
+mypy src tests
 pytest
 ```
 
@@ -126,6 +129,19 @@ manifest, attribution, checksums, data card, and aggregate quality report are
 versioned in the repository. The pipeline never opens or visits URLs contained
 inside the datasets.
 
+## Train the baseline models
+
+After reproducing the processed dataset, install the ML dependency and run:
+
+```bash
+python -m pip install -e ".[ml]"
+python scripts/train_models.py
+```
+
+This trains separate email and URL classifiers, selects thresholds on validation
+data, evaluates untouched test data, and writes model artifacts under the
+Git-ignored `artifacts/` directory. Never load an untrusted model artifact.
+
 ## Roadmap
 
 1. Define project scope and threat model
@@ -140,8 +156,8 @@ inside the datasets.
 
 ## Current limitations
 
-This repository currently provides a runnable API foundation and reproducible
-data pipeline. It does not contain a detector yet. Model evaluation results,
+This repository currently provides a runnable API foundation, reproducible data
+pipeline, and evaluated baseline models. Prediction endpoints, explanations,
 screenshots, and a live demo will be added in later phases.
 
 ## Responsible use
