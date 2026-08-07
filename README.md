@@ -159,7 +159,11 @@ python scripts/build_detection_policy.py
 ```
 
 The generated policy maps calibrated risk scores to `allow`, `warn`, `quarantine`,
-or `block` recommendations. These actions are advisory and are not enforced.
+or `block` recommendations. For URL analysis, hostname and path/query text are
+modeled separately so a brand name in an attacker's path is not confused with the
+actual destination. A small, transparent exact-host safeguard reduces false
+positives for configured well-known HTTPS domains without trusting lookalikes.
+These actions are advisory and are not enforced.
 
 ## Roadmap
 

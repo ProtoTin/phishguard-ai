@@ -2,9 +2,23 @@
   "report_version": 1,
   "project_version": "0.4.0",
   "policy": {
-    "policy_version": "1.0.0",
-    "score_interpretation": "rounded calibrated phishing probability multiplied by 100",
+    "policy_version": "1.1.0",
+    "score_interpretation": "rounded calibrated phishing probability multiplied by 100, after documented exact-host mitigation",
     "advisory_only": true,
+    "known_https_host_mitigation": {
+      "match": "exact hostname after removing an optional www prefix",
+      "maximum_probability": 0.2,
+      "hosts": [
+        "apple.com",
+        "docs.python.org",
+        "github.com",
+        "google.com",
+        "linkedin.com",
+        "microsoft.com",
+        "nasa.gov",
+        "wikipedia.org"
+      ]
+    },
     "bands": [
       {
         "minimum": 0,
@@ -139,8 +153,8 @@
       },
       "artifact": {
         "path": "artifacts/policy/email_calibrated.joblib",
-        "bytes": 1807564,
-        "sha256": "adeba2b690fd993718686116c1d756ff3c606c81c126a4ff5b98c4d622beff72"
+        "bytes": 1807565,
+        "sha256": "bc04ec9e529fb1cf61f6db87b93369a6d6b433966b74230b1a8db785cd173a8c"
       }
     },
     "url": {
@@ -151,47 +165,47 @@
         "raw": {
           "threshold": 0.6,
           "samples": 34680,
-          "accuracy": 0.996424,
-          "precision": 1.0,
-          "recall": 0.99147,
-          "f1": 0.995717,
-          "pr_auc": 0.999494,
-          "roc_auc": 0.999426,
-          "brier_score": 0.00267,
-          "false_positive_rate": 0.0,
+          "accuracy": 0.992474,
+          "precision": 0.99986,
+          "recall": 0.982183,
+          "f1": 0.990943,
+          "pr_auc": 0.999273,
+          "roc_auc": 0.999229,
+          "brier_score": 0.005117,
+          "false_positive_rate": 9.9e-05,
           "confusion_matrix": {
-            "true_negative": 20143,
-            "false_positive": 0,
-            "false_negative": 124,
-            "true_positive": 14413
+            "true_negative": 20141,
+            "false_positive": 2,
+            "false_negative": 259,
+            "true_positive": 14278
           },
-          "predicted_phishing": 14413,
-          "expected_calibration_error": 0.012034
+          "predicted_phishing": 14280,
+          "expected_calibration_error": 0.018801
         },
         "calibrated": {
           "threshold": 0.6,
           "samples": 34680,
-          "accuracy": 0.998155,
-          "precision": 0.999793,
-          "recall": 0.995804,
-          "f1": 0.997794,
-          "pr_auc": 0.999494,
-          "roc_auc": 0.999426,
-          "brier_score": 0.001529,
-          "false_positive_rate": 0.000149,
+          "accuracy": 0.997001,
+          "precision": 0.999308,
+          "recall": 0.993534,
+          "f1": 0.996413,
+          "pr_auc": 0.999273,
+          "roc_auc": 0.999229,
+          "brier_score": 0.002751,
+          "false_positive_rate": 0.000496,
           "confusion_matrix": {
-            "true_negative": 20140,
-            "false_positive": 3,
-            "false_negative": 61,
-            "true_positive": 14476
+            "true_negative": 20133,
+            "false_positive": 10,
+            "false_negative": 94,
+            "true_positive": 14443
           },
-          "predicted_phishing": 14479,
-          "expected_calibration_error": 0.000919,
+          "predicted_phishing": 14453,
+          "expected_calibration_error": 0.001011,
           "action_distribution": {
-            "allow": 20177,
-            "warn": 24,
-            "quarantine": 18,
-            "block": 14461
+            "allow": 20188,
+            "warn": 37,
+            "quarantine": 54,
+            "block": 14401
           }
         }
       },
@@ -199,54 +213,54 @@
         "raw": {
           "threshold": 0.6,
           "samples": 35143,
-          "accuracy": 0.995874,
-          "precision": 1.0,
-          "recall": 0.990158,
-          "f1": 0.995055,
-          "pr_auc": 0.999271,
-          "roc_auc": 0.99912,
-          "brier_score": 0.003169,
-          "false_positive_rate": 0.0,
-          "confusion_matrix": {
-            "true_negative": 20410,
-            "false_positive": 0,
-            "false_negative": 145,
-            "true_positive": 14588
-          },
-          "predicted_phishing": 14588,
-          "expected_calibration_error": 0.011529
-        },
-        "calibrated": {
-          "threshold": 0.6,
-          "samples": 35143,
-          "accuracy": 0.997667,
-          "precision": 0.999932,
-          "recall": 0.994502,
-          "f1": 0.99721,
-          "pr_auc": 0.999271,
-          "roc_auc": 0.99912,
-          "brier_score": 0.001975,
+          "accuracy": 0.99189,
+          "precision": 0.999931,
+          "recall": 0.980724,
+          "f1": 0.990234,
+          "pr_auc": 0.998905,
+          "roc_auc": 0.998675,
+          "brier_score": 0.005499,
           "false_positive_rate": 4.9e-05,
           "confusion_matrix": {
             "true_negative": 20409,
             "false_positive": 1,
-            "false_negative": 81,
-            "true_positive": 14652
+            "false_negative": 284,
+            "true_positive": 14449
           },
-          "predicted_phishing": 14653,
-          "expected_calibration_error": 0.000421,
+          "predicted_phishing": 14450,
+          "expected_calibration_error": 0.018738
+        },
+        "calibrated": {
+          "threshold": 0.6,
+          "samples": 35143,
+          "accuracy": 0.996557,
+          "precision": 0.999112,
+          "recall": 0.99267,
+          "f1": 0.99588,
+          "pr_auc": 0.998905,
+          "roc_auc": 0.998675,
+          "brier_score": 0.003067,
+          "false_positive_rate": 0.000637,
+          "confusion_matrix": {
+            "true_negative": 20397,
+            "false_positive": 13,
+            "false_negative": 108,
+            "true_positive": 14625
+          },
+          "predicted_phishing": 14638,
+          "expected_calibration_error": 0.000857,
           "action_distribution": {
-            "allow": 20459,
-            "warn": 30,
-            "quarantine": 19,
-            "block": 14635
+            "allow": 20449,
+            "warn": 54,
+            "quarantine": 55,
+            "block": 14585
           }
         }
       },
       "artifact": {
         "path": "artifacts/policy/url_calibrated.joblib",
-        "bytes": 1501597,
-        "sha256": "f4ecc0d3920db1f02d31d8c75c12b07cf2216dab2c0b4046fe2fb23c3daeac30"
+        "bytes": 1923124,
+        "sha256": "ab87c4326f58824ef009bb45ee50b2aa66d1093a3e2b5931f1ba035ace58778c"
       }
     }
   }

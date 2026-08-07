@@ -33,7 +33,7 @@ class FixedAnalyzer:
             ],
             "mitigating_model_features": [],
             "model_version": "0.4.0",
-            "policy_version": "1.0.0",
+            "policy_version": "1.1.0",
             "advisory_only": True,
             "safety_note": "This advisory result can be wrong.",
         }
@@ -116,7 +116,7 @@ def test_readiness_and_analysis_routes_do_not_echo_input() -> None:
     assert ready.json() == {
         "status": "ready",
         "models": ["email", "url"],
-        "policy_version": "1.0.0",
+        "policy_version": "1.1.0",
     }
     assert detector.calls == [("email", submitted_email), ("url", submitted_url)]
     assert email.status_code == 200

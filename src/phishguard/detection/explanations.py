@@ -14,6 +14,10 @@ from numpy.typing import NDArray
 
 from phishguard import __version__
 from phishguard.detection.policy import decide
+from phishguard.detection.reputation import (
+    KNOWN_HOST_PROBABILITY_CAP,
+    known_benign_https_host,
+)
 from phishguard.modeling.baselines import BinaryProbabilisticModel
 
 
@@ -119,6 +123,14 @@ def url_evidence(value: str) -> list[Evidence]:
     hostname, scheme = _url_parts(value.strip())
     lowered = value.casefold()
     evidence: list[Evidence] = []
+    known_host = known_benign_https_host(value)
+    if known_host:
+        evidence.append(
+            Evidence(
+                "known_benign_host",
+                f"The exact HTTPS hostname matches the local known-domain list ({known_host}).",
+            )
+        )
     try:
         if hostname and ipaddress.ip_address(hostname):
             evidence.append(Evidence("ip_hostname", "Uses an IP address instead of a domain name."))
@@ -200,6 +212,12 @@ def _friendly_feature(value: str) -> str:
         # Preserve word-boundary spaces so distinct character n-grams do not
         # collapse into the same human-readable label.
         return f"character pattern: {feature.replace(' ', '␠')}"
+    if prefix == "host_character":
+        pattern = feature.rsplit("__", 1)[-1].replace(" ", "␠")
+        return f"hostname pattern: {pattern}"
+    if prefix == "path_character":
+        pattern = feature.rsplit("__", 1)[-1].replace(" ", "␠")
+        return f"path/query pattern: {pattern}"
     if prefix == "lexical":
         return f"URL property: {feature.replace('_', ' ')}"
     return feature or value
@@ -217,6 +235,8 @@ def explain(
     if probability_matrix.shape != (1, 2):
         raise ValueError("Expected one two-column calibrated probability")
     probability = float(probability_matrix[0, 1])
+    if content_type == "url" and known_benign_https_host(text):
+        probability = min(probability, KNOWN_HOST_PROBABILITY_CAP)
     decision = decide(probability)
     evidence = email_evidence(text) if content_type == "email" else url_evidence(text)
     supporting, mitigating = feature_contributions(base_model, text)

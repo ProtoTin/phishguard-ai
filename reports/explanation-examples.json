@@ -55,7 +55,7 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.0.0",
+    "policy_version": "1.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -135,7 +135,7 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.0.0",
+    "policy_version": "1.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -143,59 +143,259 @@
     "content_type": "url",
     "classification": "legitimate",
     "risk_score": 0,
-    "calibrated_probability": 0.001714,
+    "calibrated_probability": 0.000166,
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "No controlled-template warning sign was detected."
+      "The exact HTTPS hostname matches the local known-domain list (wikipedia.org)."
     ],
-    "evidence": [],
+    "evidence": [
+      {
+        "code": "known_benign_host",
+        "description": "The exact HTTPS hostname matches the local known-domain list (wikipedia.org)."
+      }
+    ],
     "supporting_model_features": [
       {
         "feature": "URL property: character entropy",
-        "contribution": 6.434365
-      },
-      {
-        "feature": "URL property: dots",
-        "contribution": 0.351841
+        "contribution": 8.367327
       },
       {
         "feature": "URL property: url length",
-        "contribution": 0.316673
+        "contribution": 0.482687
       },
       {
-        "feature": "character pattern: .org/",
-        "contribution": 0.308166
+        "feature": "hostname pattern: .wi",
+        "contribution": 0.064222
       },
       {
-        "feature": "character pattern: org/",
-        "contribution": 0.307612
+        "feature": "hostname pattern: ipe",
+        "contribution": 0.055436
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 0.045933
       }
     ],
     "mitigating_model_features": [
       {
         "feature": "URL property: uses https",
-        "contribution": -8.189144
+        "contribution": -10.594394
       },
       {
         "feature": "URL property: hostname labels",
-        "contribution": -0.425915
+        "contribution": -1.555626
       },
       {
-        "feature": "character pattern: s://w",
-        "contribution": -0.423862
+        "feature": "hostname pattern: www.",
+        "contribution": -0.621832
       },
       {
-        "feature": "character pattern: /www.",
-        "contribution": -0.283
+        "feature": "hostname pattern: www",
+        "contribution": -0.611996
       },
       {
-        "feature": "character pattern: www.",
-        "contribution": -0.282703
+        "feature": "hostname pattern: ww.",
+        "contribution": -0.611751
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.0.0",
+    "policy_version": "1.1.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_linkedin_www": {
+    "content_type": "url",
+    "classification": "legitimate",
+    "risk_score": 1,
+    "calibrated_probability": 0.01496,
+    "recommended_action": "allow",
+    "guidance": "No strong phishing signal was detected; continue normal caution.",
+    "reasons": [
+      "The exact HTTPS hostname matches the local known-domain list (linkedin.com)."
+    ],
+    "evidence": [
+      {
+        "code": "known_benign_host",
+        "description": "The exact HTTPS hostname matches the local known-domain list (linkedin.com)."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 8.794223
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.556947
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 0.275598
+      },
+      {
+        "feature": "hostname pattern: ink",
+        "contribution": 0.20412
+      },
+      {
+        "feature": "hostname pattern: link",
+        "contribution": 0.191587
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -10.594394
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -1.555626
+      },
+      {
+        "feature": "hostname pattern: www.",
+        "contribution": -0.735471
+      },
+      {
+        "feature": "hostname pattern: www",
+        "contribution": -0.723838
+      },
+      {
+        "feature": "hostname pattern: ww.",
+        "contribution": -0.723548
+      }
+    ],
+    "model_version": "0.4.0",
+    "policy_version": "1.1.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_linkedin_apex": {
+    "content_type": "url",
+    "classification": "legitimate",
+    "risk_score": 20,
+    "calibrated_probability": 0.2,
+    "recommended_action": "allow",
+    "guidance": "No strong phishing signal was detected; continue normal caution.",
+    "reasons": [
+      "The exact HTTPS hostname matches the local known-domain list (linkedin.com)."
+    ],
+    "evidence": [
+      {
+        "code": "known_benign_host",
+        "description": "The exact HTTPS hostname matches the local known-domain list (linkedin.com)."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 8.600869
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.482687
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 0.275598
+      },
+      {
+        "feature": "hostname pattern: ink",
+        "contribution": 0.235642
+      },
+      {
+        "feature": "hostname pattern: link",
+        "contribution": 0.221172
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -10.594394
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -1.037084
+      },
+      {
+        "feature": "URL property: dots",
+        "contribution": -0.187571
+      },
+      {
+        "feature": "hostname pattern: edi",
+        "contribution": -0.129527
+      },
+      {
+        "feature": "hostname pattern: n.com",
+        "contribution": -0.110428
+      }
+    ],
+    "model_version": "0.4.0",
+    "policy_version": "1.1.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_linkedin_lookalike": {
+    "content_type": "url",
+    "classification": "phishing",
+    "risk_score": 100,
+    "calibrated_probability": 1.0,
+    "recommended_action": "block",
+    "guidance": "Block or isolate the content, subject to organizational review policy.",
+    "reasons": [
+      "Contains several account or credential-related terms."
+    ],
+    "evidence": [
+      {
+        "code": "suspicious_terms",
+        "description": "Contains several account or credential-related terms."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 8.986851
+      },
+      {
+        "feature": "URL property: suspicious tokens",
+        "contribution": 1.705041
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 1.607657
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.965375
+      },
+      {
+        "feature": "hostname pattern: tes",
+        "contribution": 0.205853
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -10.594394
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -1.037084
+      },
+      {
+        "feature": "URL property: dots",
+        "contribution": -0.375141
+      },
+      {
+        "feature": "hostname pattern: vil",
+        "contribution": -0.117945
+      },
+      {
+        "feature": "hostname pattern: .te",
+        "contribution": -0.065998
+      }
+    ],
+    "model_version": "0.4.0",
+    "policy_version": "1.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -228,49 +428,49 @@
     "supporting_model_features": [
       {
         "feature": "URL property: character entropy",
-        "contribution": 7.760355
+        "contribution": 10.091661
       },
       {
         "feature": "URL property: suspicious tokens",
-        "contribution": 2.642916
+        "contribution": 3.410081
       },
       {
         "feature": "URL property: digits",
-        "contribution": 1.267394
+        "contribution": 1.576856
       },
       {
         "feature": "URL property: path length",
-        "contribution": 0.984025
+        "contribution": 1.377992
       },
       {
         "feature": "URL property: url length",
-        "contribution": 0.572447
+        "contribution": 0.87255
       }
     ],
     "mitigating_model_features": [
       {
         "feature": "URL property: hostname labels",
-        "contribution": -0.567886
+        "contribution": -2.074167
+      },
+      {
+        "feature": "URL property: dots",
+        "contribution": -0.562712
+      },
+      {
+        "feature": "hostname pattern: .10",
+        "contribution": -0.100823
       },
       {
         "feature": "URL property: hostname length",
-        "contribution": -0.095849
+        "contribution": -0.053446
       },
       {
-        "feature": "character pattern: oun",
-        "contribution": -0.055234
-      },
-      {
-        "feature": "character pattern: cou",
-        "contribution": -0.048886
-      },
-      {
-        "feature": "character pattern: unt",
-        "contribution": -0.041454
+        "feature": "hostname pattern: 192",
+        "contribution": -0.017725
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.0.0",
+    "policy_version": "1.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   }

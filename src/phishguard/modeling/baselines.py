@@ -6,7 +6,7 @@ import ipaddress
 import math
 import re
 from collections.abc import Sequence
-from typing import Protocol, Self, cast
+from typing import Literal, Protocol, Self, cast
 from urllib.parse import urlsplit
 
 import numpy as np
@@ -120,6 +120,27 @@ class URLLexicalFeatures(BaseEstimator, TransformerMixin):  # type: ignore[misc]
         )
 
 
+class URLPartExtractor(BaseEstimator, TransformerMixin):  # type: ignore[misc]
+    """Extract one URL component before component-specific text vectorization."""
+
+    def __init__(self, part: Literal["hostname", "path_query"]) -> None:
+        self.part = part
+
+    def fit(self, values: Sequence[str], labels: object = None) -> Self:
+        return self
+
+    def transform(self, values: Sequence[str]) -> list[str]:
+        parts: list[str] = []
+        for value in values:
+            hostname, path, query, _ = _safe_url_parts(value)
+            path_query = f"{path or '/'}{'?' + query if query else ''}"
+            parts.append(hostname if self.part == "hostname" else path_query)
+        return parts
+
+    def get_feature_names_out(self, input_features: object = None) -> NDArray[np.str_]:
+        return np.asarray([self.part], dtype=np.str_)
+
+
 def build_email_model(seed: int = 20260806) -> BinaryProbabilisticModel:
     """Create a word-and-character TF-IDF logistic-regression pipeline."""
 
@@ -169,19 +190,46 @@ def build_email_model(seed: int = 20260806) -> BinaryProbabilisticModel:
 
 
 def build_url_model(seed: int = 20260806) -> BinaryProbabilisticModel:
-    """Create a character TF-IDF plus lexical-feature URL pipeline."""
+    """Create a component-aware character TF-IDF plus lexical URL pipeline."""
 
     features = FeatureUnion(
         [
             (
-                "character",
-                TfidfVectorizer(
-                    analyzer="char",
-                    ngram_range=(3, 5),
-                    min_df=3,
-                    max_features=75_000,
-                    sublinear_tf=True,
-                    dtype=np.float32,
+                "host_character",
+                Pipeline(
+                    [
+                        ("part", URLPartExtractor("hostname")),
+                        (
+                            "tfidf",
+                            TfidfVectorizer(
+                                analyzer="char",
+                                ngram_range=(3, 5),
+                                min_df=3,
+                                max_features=50_000,
+                                sublinear_tf=True,
+                                dtype=np.float32,
+                            ),
+                        ),
+                    ]
+                ),
+            ),
+            (
+                "path_character",
+                Pipeline(
+                    [
+                        ("part", URLPartExtractor("path_query")),
+                        (
+                            "tfidf",
+                            TfidfVectorizer(
+                                analyzer="char",
+                                ngram_range=(3, 5),
+                                min_df=3,
+                                max_features=50_000,
+                                sublinear_tf=True,
+                                dtype=np.float32,
+                            ),
+                        ),
+                    ]
                 ),
             ),
             ("lexical", URLLexicalFeatures()),

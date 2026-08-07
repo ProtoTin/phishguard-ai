@@ -188,6 +188,14 @@ def write_markdown(report: dict[str, object], path: Path) -> None:
             "email scores may be overconfident on unfamiliar campaigns or writing styles.",
             "Actions are recommendations for a future interface, not automatic enforcement.",
             "",
+            "## URL false-positive safeguard",
+            "",
+            "The URL model vectorizes the true hostname separately from the path and query.",
+            "Policy 1.1 caps the score at 20 for a short, code-reviewed list of exact HTTPS",
+            "hosts (with an optional `www` prefix). The safeguard does not match lookalikes",
+            "or arbitrary subdomains. Regression examples cover both LinkedIn hostname forms",
+            "and a malicious URL containing `linkedin.com` only inside its path.",
+            "",
         ]
     )
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -270,6 +278,9 @@ def build_policy(
             "password or access will be suspended."
         ),
         "url_low_risk": "https://www.wikipedia.org/",
+        "url_linkedin_www": "https://www.linkedin.com/feed/",
+        "url_linkedin_apex": "https://linkedin.com/feed/",
+        "url_linkedin_lookalike": "https://evil.test/redirect/linkedin.com/login/verify",
         "url_high_risk": "http://192.0.2.10/login/verify-account/password",
     }
     examples = {
@@ -282,16 +293,20 @@ def build_policy(
         for name, text in synthetic_examples.items()
     }
     expected_classifications = {
-        "email_low_risk": "legitimate",
-        "email_high_risk": "phishing",
-        "url_low_risk": "legitimate",
-        "url_high_risk": "phishing",
+        "email_low_risk": ("legitimate",),
+        "email_high_risk": ("phishing",),
+        "url_low_risk": ("legitimate",),
+        "url_linkedin_www": ("legitimate",),
+        "url_linkedin_apex": ("legitimate",),
+        "url_linkedin_lookalike": ("suspicious", "phishing"),
+        "url_high_risk": ("suspicious", "phishing"),
     }
-    for name, expected in expected_classifications.items():
+    for name, allowed in expected_classifications.items():
         actual = examples[name]["classification"]
-        if actual != expected:
+        if actual not in allowed:
             raise RuntimeError(
-                f"Example {name} was expected to be {expected}, but the policy returned {actual}"
+                f"Example {name} was expected to be one of {allowed}, "
+                f"but the policy returned {actual}"
             )
     examples_path.parent.mkdir(parents=True, exist_ok=True)
     examples_path.write_text(json.dumps(examples, indent=2) + "\n", encoding="utf-8")

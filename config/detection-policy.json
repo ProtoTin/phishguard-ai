@@ -1,7 +1,21 @@
 {
-  "policy_version": "1.0.0",
-  "score_interpretation": "rounded calibrated phishing probability multiplied by 100",
+  "policy_version": "1.1.0",
+  "score_interpretation": "rounded calibrated phishing probability multiplied by 100, after documented exact-host mitigation",
   "advisory_only": true,
+  "known_https_host_mitigation": {
+    "match": "exact hostname after removing an optional www prefix",
+    "maximum_probability": 0.2,
+    "hosts": [
+      "apple.com",
+      "docs.python.org",
+      "github.com",
+      "google.com",
+      "linkedin.com",
+      "microsoft.com",
+      "nasa.gov",
+      "wikipedia.org"
+    ]
+  },
   "bands": [
     {
       "minimum": 0,
@@ -37,13 +51,13 @@
   "models": {
     "email": {
       "path": "artifacts/policy/email_calibrated.joblib",
-      "bytes": 1807564,
-      "sha256": "adeba2b690fd993718686116c1d756ff3c606c81c126a4ff5b98c4d622beff72"
+      "bytes": 1807565,
+      "sha256": "bc04ec9e529fb1cf61f6db87b93369a6d6b433966b74230b1a8db785cd173a8c"
     },
     "url": {
       "path": "artifacts/policy/url_calibrated.joblib",
-      "bytes": 1501597,
-      "sha256": "f4ecc0d3920db1f02d31d8c75c12b07cf2216dab2c0b4046fe2fb23c3daeac30"
+      "bytes": 1923124,
+      "sha256": "ab87c4326f58824ef009bb45ee50b2aa66d1093a3e2b5931f1ba035ace58778c"
     }
   }
 }

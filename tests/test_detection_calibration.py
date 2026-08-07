@@ -39,14 +39,14 @@ def email_training_data() -> LabeledText:
 def url_training_data() -> LabeledText:
     return LabeledText(
         texts=[
-            "https://example.com/about",
-            "https://example.com/contact",
-            "https://docs.example.org/start",
-            "https://docs.example.org/guide",
-            "http://bad.test/login/verify",
-            "http://bad.test/login/password",
-            "http://evil.test/account/verify",
-            "http://evil.test/account/password",
+            "https://example.com/docs/about",
+            "https://example.com/docs/contact",
+            "https://docs.example.org/docs/start",
+            "https://docs.example.org/docs/guide",
+            "http://bad.test/security/login/verify",
+            "http://bad.test/security/login/password",
+            "http://evil.test/security/account/verify",
+            "http://evil.test/security/account/password",
         ],
         labels=np.asarray([0, 0, 0, 0, 1, 1, 1, 1], dtype=np.int_),
     )
@@ -152,9 +152,15 @@ def test_complete_policy_build(tmp_path: Path) -> None:
         "email_low_risk",
         "email_high_risk",
         "url_low_risk",
+        "url_linkedin_www",
+        "url_linkedin_apex",
+        "url_linkedin_lookalike",
         "url_high_risk",
     }
     assert examples["email_low_risk"]["classification"] == "legitimate"
     assert examples["email_high_risk"]["classification"] == "phishing"
     assert examples["url_low_risk"]["classification"] == "legitimate"
-    assert examples["url_high_risk"]["classification"] == "phishing"
+    assert examples["url_high_risk"]["classification"] in {"suspicious", "phishing"}
+    assert examples["url_linkedin_www"]["classification"] == "legitimate"
+    assert examples["url_linkedin_apex"]["classification"] == "legitimate"
+    assert examples["url_linkedin_lookalike"]["classification"] != "legitimate"

@@ -2,12 +2,13 @@
 
 ## Model summary
 
-PhishGuard 0.2.0 contains two independent binary classification baselines:
+PhishGuard 0.4.0 contains two independent binary classification baselines:
 
 - An email-text classifier using word and character TF-IDF features with
   class-balanced logistic regression.
-- A URL classifier using character TF-IDF, 14 offline lexical features, and a
-  class-balanced stochastic logistic classifier.
+- A URL classifier using separate hostname and path/query character TF-IDF
+  representations, 14 offline lexical features, and a class-balanced stochastic
+  logistic classifier.
 
 Both models estimate the likelihood of the `phishing` class. They never visit,
 resolve, crawl, or execute a submitted URL. Deterministic rules are evaluated as
@@ -39,6 +40,16 @@ filtering, user attribution, or claims that low-scoring content is safe.
 See the data card and data-quality report for provenance, label mapping,
 deduplication, privacy, and source limitations.
 
+### LinkedIn false-positive investigation
+
+The PhiUSIIL source contains conflicting LinkedIn signals: the LinkedIn homepage is
+labeled legitimate, while several LinkedIn short-link URLs are labeled phishing.
+The previous whole-URL representation also learned path punctuation and hostname text
+in the same feature space. Together, these artifacts caused a normal LinkedIn feed
+URL to score 89/100. The component-aware model and exact-host policy safeguard address
+that failure directly, and the policy build now checks both LinkedIn hostname forms
+plus a malicious URL that contains `linkedin.com` only in its path.
+
 ## Model designs
 
 ### Email
@@ -51,8 +62,9 @@ deduplication, privacy, and source limitations.
 
 ### URL
 
-- Character TF-IDF with three- to five-character n-grams
-- At most 75,000 character features
+- Separate hostname and path/query character TF-IDF branches with three- to
+  five-character n-grams
+- At most 50,000 character features per URL component
 - Fourteen URL-only lexical measurements, including length, hostname structure,
   digits, punctuation, punycode, IP-host indicators, suspicious tokens, and
   character entropy
@@ -67,7 +79,7 @@ from 0.05 through 0.95 and maximizes phishing-class F1. Recall and proximity to
 test set.
 
 - Email threshold: 0.56
-- URL threshold: 0.16
+- URL threshold: 0.26
 
 The low URL threshold shows why raw model probabilities must not be interpreted
 as risk probabilities. The separate prevention policy uses validation-only
@@ -78,13 +90,16 @@ sigmoid calibration rather than these model-selection thresholds.
 Each fitted baseline is frozen and calibrated with a sigmoid mapping on its
 validation split. No test labels are used to train the model or calibrator. The
 calibrated probability is rounded to a 0–100 risk score and mapped to four policy
-bands: allow (0–29), warn (30–59), quarantine (60–84), and block (85–100).
+bands: allow (0–29), warn (30–59), quarantine (60–84), and block (85–100). Policy
+1.1 adds a documented probability ceiling for a short list of exact, well-known
+HTTPS hosts. It does not trust lookalike domains, arbitrary subdomains, or a brand
+name that merely appears in a path.
 
 On the external email test, calibration reduced expected calibration error from
 0.201642 to 0.170752 but increased Brier score from 0.131921 to 0.138143. This
 mixed result is reported rather than hidden because calibration cannot correct
 cross-source dataset shift. On the URL test, calibration reduced both Brier score
-(0.003169 to 0.001975) and expected calibration error (0.011529 to 0.000421).
+(0.005499 to 0.003067) and expected calibration error (0.018738 to 0.000857).
 See the [explanation and prevention-policy evaluation](explanations-and-policy.md)
 for the complete results.
 
@@ -94,7 +109,7 @@ for the complete results.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Email ML | 100 | 0.5833 | 0.9130 | 0.7119 | 0.9229 | 0.1948 |
 | Email rules | 100 | 1.0000 | 0.2174 | 0.3571 | 0.8326 | 0.0000 |
-| URL ML | 35,143 | 0.9990 | 0.9957 | 0.9974 | 0.9993 | 0.000686 |
+| URL ML | 35,143 | 0.9987 | 0.9934 | 0.9961 | 0.9989 | 0.000931 |
 | URL rules | 35,143 | 1.0000 | 0.0134 | 0.0265 | 0.7506 | 0.0000 |
 
 The ML models substantially improve recall over the conservative rules. The
@@ -112,6 +127,8 @@ and is more important than its high in-source validation score.
 - URL results may benefit from collection-specific artifacts even though domains
   do not cross splits.
 - URL labels may become stale as domains and hosting change.
+- The exact-host safeguard is intentionally small and manually reviewed; it is not
+  a live reputation service, and a compromised legitimate site can still be risky.
 - English dominates the email data; multilingual reliability is unknown.
 - Attackers may evade character and lexical patterns through new domains,
   compromised legitimate sites, images, QR codes, or adversarial wording.

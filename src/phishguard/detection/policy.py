@@ -5,6 +5,11 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Literal
 
+from phishguard.detection.reputation import (
+    KNOWN_BENIGN_HOSTS,
+    KNOWN_HOST_PROBABILITY_CAP,
+)
+
 Classification = Literal["legitimate", "suspicious", "phishing"]
 RecommendedAction = Literal["allow", "warn", "quarantine", "block"]
 
@@ -31,7 +36,7 @@ class PolicyDecision:
     policy_version: str
 
 
-POLICY_VERSION = "1.0.0"
+POLICY_VERSION = "1.1.0"
 POLICY_BANDS = (
     PolicyBand(
         0,
@@ -92,7 +97,15 @@ def policy_document() -> dict[str, object]:
 
     return {
         "policy_version": POLICY_VERSION,
-        "score_interpretation": "rounded calibrated phishing probability multiplied by 100",
+        "score_interpretation": (
+            "rounded calibrated phishing probability multiplied by 100, after documented "
+            "exact-host mitigation"
+        ),
         "advisory_only": True,
+        "known_https_host_mitigation": {
+            "match": "exact hostname after removing an optional www prefix",
+            "maximum_probability": KNOWN_HOST_PROBABILITY_CAP,
+            "hosts": sorted(KNOWN_BENIGN_HOSTS),
+        },
         "bands": [asdict(band) for band in POLICY_BANDS],
     }

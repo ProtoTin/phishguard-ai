@@ -9,8 +9,8 @@
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | email | raw | 0.131921 | 0.201642 | 0.65625 | 0.913043 | 0.142857 |
 | email | calibrated | 0.138143 | 0.170752 | 0.65625 | 0.913043 | 0.142857 |
-| url | raw | 0.003169 | 0.011529 | 1.0 | 0.990158 | 0.0 |
-| url | calibrated | 0.001975 | 0.000421 | 0.999932 | 0.994502 | 4.9e-05 |
+| url | raw | 0.005499 | 0.018738 | 0.999931 | 0.980724 | 4.9e-05 |
+| url | calibrated | 0.003067 | 0.000857 | 0.999112 | 0.99267 | 0.000637 |
 
 ## Policy bands
 
@@ -27,3 +27,11 @@ Calibration maps model output to validation-set event frequencies; it cannot fix
 dataset shift. The small external email test remains the most important warning:
 email scores may be overconfident on unfamiliar campaigns or writing styles.
 Actions are recommendations for a future interface, not automatic enforcement.
+
+## URL false-positive safeguard
+
+The URL model vectorizes the true hostname separately from the path and query.
+Policy 1.1 caps the score at 20 for a short, code-reviewed list of exact HTTPS
+hosts (with an optional `www` prefix). The safeguard does not match lookalikes
+or arbitrary subdomains. Regression examples cover both LinkedIn hostname forms
+and a malicious URL containing `linkedin.com` only inside its path.

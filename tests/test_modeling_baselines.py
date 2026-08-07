@@ -4,6 +4,7 @@ import numpy as np
 
 from phishguard.modeling.baselines import (
     URLLexicalFeatures,
+    URLPartExtractor,
     build_email_model,
     build_url_model,
     email_rule_score,
@@ -11,6 +12,22 @@ from phishguard.modeling.baselines import (
     url_lexical_vector,
     url_rule_score,
 )
+
+
+def test_url_components_are_vectorized_separately() -> None:
+    values = [
+        "https://www.linkedin.com/feed/?view=all",
+        "https://evil.test/redirect/linkedin.com",
+    ]
+
+    assert URLPartExtractor("hostname").fit(values).transform(values) == [
+        "www.linkedin.com",
+        "evil.test",
+    ]
+    assert URLPartExtractor("path_query").fit(values).transform(values) == [
+        "/feed/?view=all",
+        "/redirect/linkedin.com",
+    ]
 
 
 def test_url_lexical_features_detect_offline_signals() -> None:
@@ -61,10 +78,10 @@ def test_email_pipeline_fits_and_predicts_probabilities() -> None:
 
 def test_url_pipeline_fits_and_predicts_probabilities() -> None:
     texts = [
-        "https://example.com/about",
-        "https://example.com/contact",
-        "https://docs.example.org/start",
-        "https://docs.example.org/guide",
+        "https://example.com/docs/about",
+        "https://example.com/docs/contact",
+        "https://docs.example.org/docs/start",
+        "https://docs.example.org/docs/guide",
         "http://bad.test/login/verify",
         "http://bad.test/login/password",
         "http://evil.test/account/verify",
@@ -74,7 +91,7 @@ def test_url_pipeline_fits_and_predicts_probabilities() -> None:
     model = build_url_model(seed=7).fit(texts, labels)
 
     probabilities = model.predict_proba(
-        ["https://example.com/help", "http://bad.test/login/account"]
+        ["https://example.com/docs/help", "http://bad.test/login/account"]
     )
 
     assert probabilities.shape == (2, 2)

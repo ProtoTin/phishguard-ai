@@ -11,7 +11,12 @@ from phishguard.detection.explanations import (
     feature_contributions,
     url_evidence,
 )
-from phishguard.modeling.baselines import BinaryProbabilisticModel, build_email_model
+from phishguard.detection.reputation import known_benign_https_host
+from phishguard.modeling.baselines import (
+    BinaryProbabilisticModel,
+    build_email_model,
+    build_url_model,
+)
 
 
 class FixedCalibratedModel:
@@ -34,6 +39,19 @@ def fitted_email_model() -> BinaryProbabilisticModel:
     ]
     labels = np.asarray([0, 0, 0, 1, 1, 1], dtype=np.int_)
     return build_email_model(seed=7).fit(texts, labels)
+
+
+def fitted_url_model() -> BinaryProbabilisticModel:
+    texts = [
+        "https://example.com/docs/about",
+        "https://example.org/docs/contact",
+        "https://docs.example.org/docs/guide",
+        "http://bad.test/login/verify",
+        "http://bad.test/login/password",
+        "http://evil.test/account/verify",
+    ]
+    labels = np.asarray([0, 0, 0, 1, 1, 1], dtype=np.int_)
+    return build_url_model(seed=7).fit(texts, labels)
 
 
 def test_evidence_uses_controlled_descriptions() -> None:
@@ -87,3 +105,31 @@ def test_explanation_falls_back_when_no_rule_evidence() -> None:
 
     assert result["classification"] == "legitimate"
     assert result["reasons"]
+
+
+def test_known_https_host_caps_false_positive_but_not_lookalike() -> None:
+    model = fitted_url_model()
+
+    linkedin = explain("url", "https://linkedin.com/feed/", model, FixedCalibratedModel(0.99))
+    lookalike = explain(
+        "url",
+        "https://evil.test/redirect/linkedin.com/login/verify",
+        model,
+        FixedCalibratedModel(0.99),
+    )
+
+    assert linkedin["risk_score"] == 20
+    assert linkedin["classification"] == "legitimate"
+    linkedin_evidence = linkedin["evidence"]
+    assert isinstance(linkedin_evidence, list)
+    assert "known_benign_host" in {item["code"] for item in linkedin_evidence}
+    assert lookalike["risk_score"] == 99
+    assert lookalike["classification"] == "phishing"
+
+
+def test_known_host_match_is_exact_and_https_only() -> None:
+    assert known_benign_https_host("https://www.linkedin.com/feed/") == "linkedin.com"
+    assert known_benign_https_host("http://linkedin.com/feed/") is None
+    assert known_benign_https_host("https://login.linkedin.com/") is None
+    assert known_benign_https_host("https://linkedin.com.evil.test/") is None
+    assert known_benign_https_host("https://[invalid") is None
