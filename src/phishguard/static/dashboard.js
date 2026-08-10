@@ -15,8 +15,8 @@ const MODES = {
   url: {
     field: "url",
     endpoint: "/v1/analyze/url",
-    label: "Paste the complete website URL",
-    help: "The address is inspected as text. PhishGuard will not visit it.",
+    label: "Paste a website URL or domain",
+    help: "The address is inspected as text and never visited. Bare domains assume HTTPS.",
     placeholder: "https://example.com/account/verify",
     example: "http://192.0.2.10/login/verify-account/password",
     maximum: 2048,

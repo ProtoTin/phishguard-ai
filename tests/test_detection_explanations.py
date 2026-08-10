@@ -11,7 +11,7 @@ from phishguard.detection.explanations import (
     feature_contributions,
     url_evidence,
 )
-from phishguard.detection.reputation import known_benign_https_host
+from phishguard.detection.reputation import TRANCO_TOP_DOMAINS, reputable_https_host
 from phishguard.modeling.baselines import (
     BinaryProbabilisticModel,
     build_email_model,
@@ -122,14 +122,29 @@ def test_known_https_host_caps_false_positive_but_not_lookalike() -> None:
     assert linkedin["classification"] == "legitimate"
     linkedin_evidence = linkedin["evidence"]
     assert isinstance(linkedin_evidence, list)
-    assert "known_benign_host" in {item["code"] for item in linkedin_evidence}
+    assert "popular_domain" in {item["code"] for item in linkedin_evidence}
     assert lookalike["risk_score"] == 99
     assert lookalike["classification"] == "phishing"
 
 
 def test_known_host_match_is_exact_and_https_only() -> None:
-    assert known_benign_https_host("https://www.linkedin.com/feed/") == "linkedin.com"
-    assert known_benign_https_host("http://linkedin.com/feed/") is None
-    assert known_benign_https_host("https://login.linkedin.com/") is None
-    assert known_benign_https_host("https://linkedin.com.evil.test/") is None
-    assert known_benign_https_host("https://[invalid") is None
+    assert reputable_https_host("https://www.linkedin.com/feed/") == "linkedin.com"
+    assert reputable_https_host("http://linkedin.com/feed/") is None
+    assert reputable_https_host("https://login.linkedin.com/") is None
+    assert reputable_https_host("https://linkedin.com.evil.test/") is None
+    assert reputable_https_host("https://[invalid") is None
+
+
+def test_bare_youtube_domain_is_normalized_and_reputation_mitigated() -> None:
+    model = fitted_url_model()
+
+    result = explain("url", "youtube.com", model, FixedCalibratedModel(0.99))
+
+    evidence = result["evidence"]
+    assert isinstance(evidence, list)
+    assert result["risk_score"] == 20
+    assert result["classification"] == "legitimate"
+    assert {item["code"] for item in evidence} >= {"assumed_https", "popular_domain"}
+    assert TRANCO_TOP_DOMAINS["youtube.com"] == 8
+    assert TRANCO_TOP_DOMAINS["youtu.be"] == 47
+    assert len(TRANCO_TOP_DOMAINS) == 1_000

@@ -31,7 +31,8 @@ Actions are recommendations for a future interface, not automatic enforcement.
 ## URL false-positive safeguard
 
 The URL model vectorizes the true hostname separately from the path and query.
-Policy 1.1 caps the score at 20 for a short, code-reviewed list of exact HTTPS
-hosts (with an optional `www` prefix). The safeguard does not match lookalikes
-or arbitrary subdomains. Regression examples cover both LinkedIn hostname forms
-and a malicious URL containing `linkedin.com` only inside its path.
+Policy 1.2 caps the score at 20 for exact HTTPS hosts in a pinned Tranco top-1000
+snapshot (with an optional `www` prefix). The safeguard does not match lookalikes
+or arbitrary subdomains. A missing scheme is analyzed as HTTPS instead of silently
+being treated as HTTP. Regression examples cover LinkedIn and YouTube variants,
+plus malicious URLs containing those brands only inside their paths.

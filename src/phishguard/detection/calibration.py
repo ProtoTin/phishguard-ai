@@ -191,10 +191,11 @@ def write_markdown(report: dict[str, object], path: Path) -> None:
             "## URL false-positive safeguard",
             "",
             "The URL model vectorizes the true hostname separately from the path and query.",
-            "Policy 1.1 caps the score at 20 for a short, code-reviewed list of exact HTTPS",
-            "hosts (with an optional `www` prefix). The safeguard does not match lookalikes",
-            "or arbitrary subdomains. Regression examples cover both LinkedIn hostname forms",
-            "and a malicious URL containing `linkedin.com` only inside its path.",
+            "Policy 1.2 caps the score at 20 for exact HTTPS hosts in a pinned Tranco top-1000",
+            "snapshot (with an optional `www` prefix). The safeguard does not match lookalikes",
+            "or arbitrary subdomains. A missing scheme is analyzed as HTTPS instead of silently",
+            "being treated as HTTP. Regression examples cover LinkedIn and YouTube variants,",
+            "plus malicious URLs containing those brands only inside their paths.",
             "",
         ]
     )
@@ -281,6 +282,10 @@ def build_policy(
         "url_linkedin_www": "https://www.linkedin.com/feed/",
         "url_linkedin_apex": "https://linkedin.com/feed/",
         "url_linkedin_lookalike": "https://evil.test/redirect/linkedin.com/login/verify",
+        "url_youtube_bare": "youtube.com",
+        "url_youtube_www": "https://www.youtube.com/watch?v=example",
+        "url_youtube_short": "https://youtu.be/example",
+        "url_youtube_lookalike": "https://evil.test/redirect/youtube.com/login/verify",
         "url_high_risk": "http://192.0.2.10/login/verify-account/password",
     }
     examples = {
@@ -299,6 +304,10 @@ def build_policy(
         "url_linkedin_www": ("legitimate",),
         "url_linkedin_apex": ("legitimate",),
         "url_linkedin_lookalike": ("suspicious", "phishing"),
+        "url_youtube_bare": ("legitimate",),
+        "url_youtube_www": ("legitimate",),
+        "url_youtube_short": ("legitimate",),
+        "url_youtube_lookalike": ("suspicious", "phishing"),
         "url_high_risk": ("suspicious", "phishing"),
     }
     for name, allowed in expected_classifications.items():

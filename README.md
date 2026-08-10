@@ -75,6 +75,7 @@ Classification + score + reasons + recommended action
 - [Data card](docs/data-card.md)
 - [Latest data-quality report](docs/data-quality-report.md)
 - [Model card](docs/model-card.md)
+- [URL reputation and normalization](docs/url-reputation.md)
 - [Baseline evaluation](docs/model-evaluation.md)
 - [Explanation and prevention-policy evaluation](docs/explanations-and-policy.md)
 - [API guide](docs/api.md)
@@ -161,8 +162,9 @@ python scripts/build_detection_policy.py
 The generated policy maps calibrated risk scores to `allow`, `warn`, `quarantine`,
 or `block` recommendations. For URL analysis, hostname and path/query text are
 modeled separately so a brand name in an attacker's path is not confused with the
-actual destination. A small, transparent exact-host safeguard reduces false
-positives for configured well-known HTTPS domains without trusting lookalikes.
+actual destination. A transparent exact-host safeguard based on pinned Tranco
+top-domain data reduces false positives for popular HTTPS domains without trusting
+lookalikes. Inputs without a scheme are analyzed as HTTPS and clearly disclosed.
 These actions are advisory and are not enforced.
 
 ## Roadmap

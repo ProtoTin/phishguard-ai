@@ -47,8 +47,9 @@ labeled legitimate, while several LinkedIn short-link URLs are labeled phishing.
 The previous whole-URL representation also learned path punctuation and hostname text
 in the same feature space. Together, these artifacts caused a normal LinkedIn feed
 URL to score 89/100. The component-aware model and exact-host policy safeguard address
-that failure directly, and the policy build now checks both LinkedIn hostname forms
-plus a malicious URL that contains `linkedin.com` only in its path.
+that failure directly. A later YouTube regression exposed the broader weakness: the
+source contained `youtube.com` only inside malicious paths and query parameters, not
+as the real hostname.
 
 ## Model designs
 
@@ -91,9 +92,11 @@ Each fitted baseline is frozen and calibrated with a sigmoid mapping on its
 validation split. No test labels are used to train the model or calibrator. The
 calibrated probability is rounded to a 0–100 risk score and mapped to four policy
 bands: allow (0–29), warn (30–59), quarantine (60–84), and block (85–100). Policy
-1.1 adds a documented probability ceiling for a short list of exact, well-known
-HTTPS hosts. It does not trust lookalike domains, arbitrary subdomains, or a brand
-name that merely appears in a path.
+1.2 adds a documented probability ceiling for exact HTTPS hosts in the pinned
+[Tranco W3779 top-1000 snapshot](https://tranco-list.eu/list/W3779/1000000).
+It does not trust lookalike domains, arbitrary subdomains, or a brand name that
+merely appears in a path. Bare domains such as `youtube.com` are normalized to HTTPS
+before scoring instead of being silently treated as HTTP.
 
 On the external email test, calibration reduced expected calibration error from
 0.201642 to 0.170752 but increased Brier score from 0.131921 to 0.138143. This
@@ -127,8 +130,9 @@ and is more important than its high in-source validation score.
 - URL results may benefit from collection-specific artifacts even though domains
   do not cross splits.
 - URL labels may become stale as domains and hosting change.
-- The exact-host safeguard is intentionally small and manually reviewed; it is not
-  a live reputation service, and a compromised legitimate site can still be risky.
+- The exact-host safeguard uses popularity as a false-positive mitigation, not proof
+  of safety. It is not a live threat-intelligence service, and a popular or
+  compromised site can still host risky content.
 - English dominates the email data; multilingual reliability is unknown.
 - Attackers may evade character and lexical patterns through new domains,
   compromised legitimate sites, images, QR codes, or adversarial wording.

@@ -16,7 +16,8 @@ from phishguard import __version__
 from phishguard.detection.policy import decide
 from phishguard.detection.reputation import (
     KNOWN_HOST_PROBABILITY_CAP,
-    known_benign_https_host,
+    normalize_url_input,
+    reputable_https_host,
 )
 from phishguard.modeling.baselines import BinaryProbabilisticModel
 
@@ -123,12 +124,12 @@ def url_evidence(value: str) -> list[Evidence]:
     hostname, scheme = _url_parts(value.strip())
     lowered = value.casefold()
     evidence: list[Evidence] = []
-    known_host = known_benign_https_host(value)
+    known_host = reputable_https_host(value)
     if known_host:
         evidence.append(
             Evidence(
-                "known_benign_host",
-                f"The exact HTTPS hostname matches the local known-domain list ({known_host}).",
+                "popular_domain",
+                f"The exact HTTPS hostname is in the pinned Tranco top-1000 list ({known_host}).",
             )
         )
     try:
@@ -231,15 +232,30 @@ def explain(
 ) -> dict[str, object]:
     """Create a complete, advisory, explainable detection result."""
 
-    probability_matrix = np.asarray(calibrated_model.predict_proba([text]), dtype=np.float64)
+    analysis_text, assumed_https = (
+        normalize_url_input(text) if content_type == "url" else (text, False)
+    )
+    probability_matrix = np.asarray(
+        calibrated_model.predict_proba([analysis_text]), dtype=np.float64
+    )
     if probability_matrix.shape != (1, 2):
         raise ValueError("Expected one two-column calibrated probability")
     probability = float(probability_matrix[0, 1])
-    if content_type == "url" and known_benign_https_host(text):
+    if content_type == "url" and reputable_https_host(analysis_text):
         probability = min(probability, KNOWN_HOST_PROBABILITY_CAP)
     decision = decide(probability)
-    evidence = email_evidence(text) if content_type == "email" else url_evidence(text)
-    supporting, mitigating = feature_contributions(base_model, text)
+    evidence = (
+        email_evidence(analysis_text) if content_type == "email" else url_evidence(analysis_text)
+    )
+    if assumed_https:
+        evidence.insert(
+            0,
+            Evidence(
+                "assumed_https",
+                "No scheme was provided, so the detector analyzed the URL as HTTPS.",
+            ),
+        )
+    supporting, mitigating = feature_contributions(base_model, analysis_text)
     reasons = [item.description for item in evidence[:4]]
     if not reasons and supporting and decision.classification == "phishing":
         reasons.append("Statistical patterns resemble examples learned by the phishing model.")

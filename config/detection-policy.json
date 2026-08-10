@@ -1,20 +1,18 @@
 {
-  "policy_version": "1.1.0",
+  "policy_version": "1.2.0",
   "score_interpretation": "rounded calibrated phishing probability multiplied by 100, after documented exact-host mitigation",
   "advisory_only": true,
   "known_https_host_mitigation": {
     "match": "exact hostname after removing an optional www prefix",
     "maximum_probability": 0.2,
-    "hosts": [
-      "apple.com",
-      "docs.python.org",
-      "github.com",
-      "google.com",
-      "linkedin.com",
-      "microsoft.com",
-      "nasa.gov",
-      "wikipedia.org"
-    ]
+    "source": "Tranco top-1000 popularity ranking",
+    "source_list_id": "W3779",
+    "source_generated_date": "2026-08-09",
+    "source_url": "https://tranco-list.eu/list/W3779/1000000",
+    "snapshot_file": "phishguard/data/tranco-W3779-top1000.csv",
+    "snapshot_sha256": "a6643a3a179c11aa14db551e9595f7d4410528eadb02b0330b4893525bf6aa78",
+    "host_count": 1000,
+    "limitation": "Popularity reduces false positives but does not prove a page is safe."
   },
   "bands": [
     {
@@ -51,8 +49,8 @@
   "models": {
     "email": {
       "path": "artifacts/policy/email_calibrated.joblib",
-      "bytes": 1807565,
-      "sha256": "bc04ec9e529fb1cf61f6db87b93369a6d6b433966b74230b1a8db785cd173a8c"
+      "bytes": 1807564,
+      "sha256": "74dd30393507ed5bbc781b0ee85f2001074b5517af0a1a001283dde2ff00b33a"
     },
     "url": {
       "path": "artifacts/policy/url_calibrated.joblib",

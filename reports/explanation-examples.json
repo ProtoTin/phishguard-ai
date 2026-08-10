@@ -55,7 +55,7 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.1.0",
+    "policy_version": "1.2.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -135,7 +135,7 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.1.0",
+    "policy_version": "1.2.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -147,12 +147,12 @@
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "The exact HTTPS hostname matches the local known-domain list (wikipedia.org)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (wikipedia.org)."
     ],
     "evidence": [
       {
-        "code": "known_benign_host",
-        "description": "The exact HTTPS hostname matches the local known-domain list (wikipedia.org)."
+        "code": "popular_domain",
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (wikipedia.org)."
       }
     ],
     "supporting_model_features": [
@@ -200,7 +200,7 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.1.0",
+    "policy_version": "1.2.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -212,12 +212,12 @@
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "The exact HTTPS hostname matches the local known-domain list (linkedin.com)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (linkedin.com)."
     ],
     "evidence": [
       {
-        "code": "known_benign_host",
-        "description": "The exact HTTPS hostname matches the local known-domain list (linkedin.com)."
+        "code": "popular_domain",
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (linkedin.com)."
       }
     ],
     "supporting_model_features": [
@@ -265,7 +265,7 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.1.0",
+    "policy_version": "1.2.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -277,12 +277,12 @@
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "The exact HTTPS hostname matches the local known-domain list (linkedin.com)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (linkedin.com)."
     ],
     "evidence": [
       {
-        "code": "known_benign_host",
-        "description": "The exact HTTPS hostname matches the local known-domain list (linkedin.com)."
+        "code": "popular_domain",
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (linkedin.com)."
       }
     ],
     "supporting_model_features": [
@@ -330,7 +330,7 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.1.0",
+    "policy_version": "1.2.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -395,7 +395,272 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.1.0",
+    "policy_version": "1.2.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_youtube_bare": {
+    "content_type": "url",
+    "classification": "legitimate",
+    "risk_score": 20,
+    "calibrated_probability": 0.2,
+    "recommended_action": "allow",
+    "guidance": "No strong phishing signal was detected; continue normal caution.",
+    "reasons": [
+      "No scheme was provided, so the detector analyzed the URL as HTTPS.",
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtube.com)."
+    ],
+    "evidence": [
+      {
+        "code": "assumed_https",
+        "description": "No scheme was provided, so the detector analyzed the URL as HTTPS."
+      },
+      {
+        "code": "popular_domain",
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtube.com)."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 8.115315
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.352733
+      },
+      {
+        "feature": "hostname pattern: you",
+        "contribution": 0.10832
+      },
+      {
+        "feature": "hostname pattern: .co",
+        "contribution": 0.033207
+      },
+      {
+        "feature": "hostname pattern: be.",
+        "contribution": 0.029217
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -10.594394
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -1.037084
+      },
+      {
+        "feature": "URL property: dots",
+        "contribution": -0.187571
+      },
+      {
+        "feature": "hostname pattern: e.co",
+        "contribution": -0.089858
+      },
+      {
+        "feature": "hostname pattern: out",
+        "contribution": -0.080626
+      }
+    ],
+    "model_version": "0.4.0",
+    "policy_version": "1.2.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_youtube_www": {
+    "content_type": "url",
+    "classification": "legitimate",
+    "risk_score": 14,
+    "calibrated_probability": 0.135375,
+    "recommended_action": "allow",
+    "guidance": "No strong phishing signal was detected; continue normal caution.",
+    "reasons": [
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtube.com)."
+    ],
+    "evidence": [
+      {
+        "code": "popular_domain",
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtube.com)."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 9.303707
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.724031
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 0.275598
+      },
+      {
+        "feature": "hostname pattern: you",
+        "contribution": 0.0891
+      },
+      {
+        "feature": "path/query pattern: ple",
+        "contribution": 0.036064
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -10.594394
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -1.555626
+      },
+      {
+        "feature": "hostname pattern: www.",
+        "contribution": -0.658259
+      },
+      {
+        "feature": "hostname pattern: www",
+        "contribution": -0.647847
+      },
+      {
+        "feature": "hostname pattern: ww.",
+        "contribution": -0.647588
+      }
+    ],
+    "model_version": "0.4.0",
+    "policy_version": "1.2.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_youtube_short": {
+    "content_type": "url",
+    "classification": "legitimate",
+    "risk_score": 20,
+    "calibrated_probability": 0.2,
+    "recommended_action": "allow",
+    "guidance": "No strong phishing signal was detected; continue normal caution.",
+    "reasons": [
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtu.be)."
+    ],
+    "evidence": [
+      {
+        "code": "popular_domain",
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtu.be)."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 8.428419
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.445558
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 0.367464
+      },
+      {
+        "feature": "hostname pattern: you",
+        "contribution": 0.156578
+      },
+      {
+        "feature": "hostname pattern: u.b",
+        "contribution": 0.148926
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -10.594394
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -1.037084
+      },
+      {
+        "feature": "URL property: dots",
+        "contribution": -0.187571
+      },
+      {
+        "feature": "hostname pattern: .be",
+        "contribution": -0.160653
+      },
+      {
+        "feature": "hostname pattern: out",
+        "contribution": -0.116546
+      }
+    ],
+    "model_version": "0.4.0",
+    "policy_version": "1.2.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_youtube_lookalike": {
+    "content_type": "url",
+    "classification": "phishing",
+    "risk_score": 100,
+    "calibrated_probability": 1.0,
+    "recommended_action": "block",
+    "guidance": "Block or isolate the content, subject to organizational review policy.",
+    "reasons": [
+      "Contains several account or credential-related terms."
+    ],
+    "evidence": [
+      {
+        "code": "suspicious_terms",
+        "description": "Contains several account or credential-related terms."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 9.130017
+      },
+      {
+        "feature": "URL property: suspicious tokens",
+        "contribution": 1.705041
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 1.561724
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.94681
+      },
+      {
+        "feature": "hostname pattern: tes",
+        "contribution": 0.205853
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -10.594394
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -1.037084
+      },
+      {
+        "feature": "URL property: dots",
+        "contribution": -0.375141
+      },
+      {
+        "feature": "hostname pattern: vil",
+        "contribution": -0.117945
+      },
+      {
+        "feature": "hostname pattern: .te",
+        "contribution": -0.065998
+      }
+    ],
+    "model_version": "0.4.0",
+    "policy_version": "1.2.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -470,7 +735,7 @@
       }
     ],
     "model_version": "0.4.0",
-    "policy_version": "1.1.0",
+    "policy_version": "1.2.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   }
