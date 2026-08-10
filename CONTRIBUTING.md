@@ -1,27 +1,38 @@
-# Contributing
+# Contributing to PhishGuard
 
-Thank you for helping improve PhishGuard. This project accepts defensive,
-educational contributions that respect user privacy and the responsible-use
-guidelines in the README.
+Thank you for improving this defensive security project. Contributions should keep
+the system explainable, reproducible, privacy-conscious, and honest about uncertainty.
 
 ## Development workflow
 
-1. Create a focused branch from `main`.
-2. Set up the environment using `docs/development.md`.
-3. Add or update tests with the change.
-4. Run linting, formatting, type checks, and tests locally.
-5. Open a pull request describing the problem, solution, and validation.
+1. Fork the repository and create a focused branch.
+2. Follow the setup instructions in `README.md` and `docs/development.md`.
+3. Add or update tests for every behavior change.
+4. Run the complete quality suite before opening a pull request:
 
-Do not commit credentials, private email messages, downloaded datasets, or
-generated model artifacts. Dataset additions must include provenance, license,
-privacy, and label-quality documentation.
+   ```bash
+   ruff format --check .
+   ruff check .
+   mypy src tests
+   pytest -q
+   ```
 
-## Pull-request expectations
+5. Explain the security impact, evaluation evidence, and limitations in the pull
+   request description.
 
-- Keep changes focused and explain security-relevant decisions.
-- Preserve the rule that submitted URLs are not fetched by the analysis path.
-- Treat all submitted email fields and model outputs as untrusted data.
-- Report model changes with comparable metrics on an untouched test set.
-- Update documentation when behavior, configuration, or limitations change.
+## Safety and data rules
 
-Security vulnerabilities should follow `SECURITY.md` instead of a public issue.
+- Never commit credentials, API keys, private email, raw datasets, or trained model
+  artifacts.
+- Treat every URL as inert text. Do not visit or resolve dataset URLs during tests.
+- Use reserved domains and IP ranges such as `.test`, `.example`, and `192.0.2.0/24`
+  for synthetic examples.
+- Do not weaken request limits, artifact verification, output escaping, or the
+  uncertainty policy without documenting the security rationale.
+- Do not describe an absent reputation match as proof that a URL is safe.
+
+## Pull-request scope
+
+Prefer small changes with reproducible evidence. Useful contributions include new
+regression cases, evaluation methods, accessibility improvements, documented
+threat-intelligence adapters, and security hardening.

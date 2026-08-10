@@ -195,3 +195,9 @@ distributed rate limiting, public hosting, and a live demo remain later phases.
 This project is intended for education, defensive security research, and
 portfolio demonstration. It will not collect credentials, execute attachments,
 visit submitted URLs, or claim to replace a layered email-security program.
+
+## Contributing and security
+
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a
+pull request. Report vulnerabilities according to [SECURITY.md](SECURITY.md), and do
+not place active malicious URLs, credentials, or private messages in public issues.
