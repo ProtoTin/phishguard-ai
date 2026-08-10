@@ -13,7 +13,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from phishguard import __version__
-from phishguard.detection.policy import decide
+from phishguard.detection.policy import decide, decide_unverified
 from phishguard.detection.reputation import (
     KNOWN_HOST_PROBABILITY_CAP,
     normalize_url_input,
@@ -94,6 +94,8 @@ EMAIL_EVIDENCE_PATTERNS = (
         "Contains an embedded form or script-like HTML pattern.",
     ),
 )
+
+CORROBORATING_URL_EVIDENCE = frozenset({"ip_hostname", "at_symbol", "suspicious_terms"})
 
 
 def email_evidence(text: str) -> list[Evidence]:
@@ -241,9 +243,6 @@ def explain(
     if probability_matrix.shape != (1, 2):
         raise ValueError("Expected one two-column calibrated probability")
     probability = float(probability_matrix[0, 1])
-    if content_type == "url" and reputable_https_host(analysis_text):
-        probability = min(probability, KNOWN_HOST_PROBABILITY_CAP)
-    decision = decide(probability)
     evidence = (
         email_evidence(analysis_text) if content_type == "email" else url_evidence(analysis_text)
     )
@@ -255,6 +254,27 @@ def explain(
                 "No scheme was provided, so the detector analyzed the URL as HTTPS.",
             ),
         )
+    if content_type == "url":
+        reputable_host = reputable_https_host(analysis_text)
+        corroborated = any(item.code in CORROBORATING_URL_EVIDENCE for item in evidence)
+        if reputable_host and not corroborated:
+            probability = min(probability, KNOWN_HOST_PROBABILITY_CAP)
+            decision = decide(probability)
+        elif not reputable_host and not corroborated:
+            decision = decide_unverified(probability)
+            probability = decision.risk_score / 100
+            evidence.append(
+                Evidence(
+                    "unverified_domain",
+                    "The domain is outside the offline reputation snapshot, and no live "
+                    "reputation check was performed.",
+                )
+            )
+        else:
+            evidence = [item for item in evidence if item.code != "popular_domain"]
+            decision = decide(probability)
+    else:
+        decision = decide(probability)
     supporting, mitigating = feature_contributions(base_model, analysis_text)
     reasons = [item.description for item in evidence[:4]]
     if not reasons and supporting and decision.classification == "phishing":

@@ -32,8 +32,8 @@ class FixedAnalyzer:
                 {"feature": "word or phrase: verify", "contribution": 0.42}
             ],
             "mitigating_model_features": [],
-            "model_version": "0.4.0",
-            "policy_version": "1.2.0",
+            "model_version": "0.5.0",
+            "policy_version": "2.0.0",
             "advisory_only": True,
             "safety_note": "This advisory result can be wrong.",
         }
@@ -66,14 +66,14 @@ def test_service_info_and_health() -> None:
     assert info.status_code == 200
     assert info.json() == {
         "name": "PhishGuard API",
-        "version": "0.4.0",
+        "version": "0.5.0",
         "status": "detection_api",
         "documentation": "/docs",
     }
     assert health.json() == {
         "status": "healthy",
         "service": "PhishGuard API",
-        "version": "0.4.0",
+        "version": "0.5.0",
         "environment": "test",
     }
     assert health.headers["x-content-type-options"] == "nosniff"
@@ -116,7 +116,7 @@ def test_readiness_and_analysis_routes_do_not_echo_input() -> None:
     assert ready.json() == {
         "status": "ready",
         "models": ["email", "url"],
-        "policy_version": "1.2.0",
+        "policy_version": "2.0.0",
     }
     assert detector.calls == [("email", submitted_email), ("url", submitted_url)]
     assert email.status_code == 200

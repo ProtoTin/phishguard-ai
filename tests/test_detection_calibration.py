@@ -159,6 +159,7 @@ def test_complete_policy_build(tmp_path: Path) -> None:
         "url_youtube_www",
         "url_youtube_short",
         "url_youtube_lookalike",
+        "url_unverified",
         "url_high_risk",
     }
     assert examples["email_low_risk"]["classification"] == "legitimate"
@@ -172,3 +173,4 @@ def test_complete_policy_build(tmp_path: Path) -> None:
     assert examples["url_youtube_www"]["classification"] == "legitimate"
     assert examples["url_youtube_short"]["classification"] == "legitimate"
     assert examples["url_youtube_lookalike"]["classification"] != "legitimate"
+    assert examples["url_unverified"]["classification"] == "unverified"

@@ -32,6 +32,7 @@ const ACTION_TITLES = {
 
 const GAUGE_COLORS = {
   legitimate: "#63e6a5",
+  unverified: "#8db4ff",
   suspicious: "#ffc970",
   phishing: "#ff6e76",
 };

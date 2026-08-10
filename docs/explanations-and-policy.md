@@ -18,6 +18,7 @@
 | ---: | --- | --- |
 | 0–29 | Legitimate | Allow with normal caution |
 | 30–59 | Suspicious | Warn and verify independently |
+| 30–59 | Unverified URL | Warn; live status was not checked |
 | 60–84 | Phishing | Recommend quarantine and review |
 | 85–100 | Phishing | Recommend block or isolation |
 
@@ -31,8 +32,16 @@ Actions are recommendations for a future interface, not automatic enforcement.
 ## URL false-positive safeguard
 
 The URL model vectorizes the true hostname separately from the path and query.
-Policy 1.2 caps the score at 20 for exact HTTPS hosts in a pinned Tranco top-1000
+Policy 2.0 caps the score at 20 for exact HTTPS hosts in a pinned Tranco top-1000
 snapshot (with an optional `www` prefix). The safeguard does not match lookalikes
 or arbitrary subdomains. A missing scheme is analyzed as HTTPS instead of silently
 being treated as HTTP. Regression examples cover LinkedIn and YouTube variants,
 plus malicious URLs containing those brands only inside their paths.
+
+## Unverified URL policy
+
+An unranked URL without a concrete phishing indicator is labeled `unverified`,
+with its score constrained to 30–59. Model similarity alone cannot produce a
+phishing verdict for an unknown domain. IP hosts, obscured hosts, and multiple
+credential-related terms can corroborate a phishing result. This preserves
+caution without presenting offline statistical similarity as live reputation.

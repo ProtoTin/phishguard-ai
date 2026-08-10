@@ -65,7 +65,7 @@ input safely.
 
 Each analysis will return:
 
-- A classification: `legitimate`, `suspicious`, or `phishing`
+- A classification: `legitimate`, `unverified`, `suspicious`, or `phishing`
 - A risk score from 0 to 100
 - A confidence or uncertainty indication
 - Human-readable reasons for the result
@@ -165,6 +165,7 @@ data:
 | Risk score | Classification | Recommended action |
 | ---: | --- | --- |
 | 0-29 | Legitimate | Allow with normal caution |
+| 30-59 | Unverified URL | Warn when offline evidence cannot support a verdict |
 | 30-59 | Suspicious | Warn and request manual review |
 | 60-84 | Phishing | Recommend quarantine |
 | 85-100 | Phishing | Recommend block |

@@ -2,7 +2,13 @@
 
 import pytest
 
-from phishguard.detection.policy import POLICY_VERSION, decide, policy_document, risk_score
+from phishguard.detection.policy import (
+    POLICY_VERSION,
+    decide,
+    decide_unverified,
+    policy_document,
+    risk_score,
+)
 
 
 @pytest.mark.parametrize(
@@ -37,3 +43,12 @@ def test_policy_document_is_advisory_and_complete() -> None:
     assert isinstance(bands, list)
     assert bands[0]["minimum"] == 0
     assert bands[-1]["maximum"] == 100
+
+
+@pytest.mark.parametrize(("probability", "score"), [(0.01, 30), (0.45, 45), (0.99, 59)])
+def test_unverified_decision_bounds_model_only_scores(probability: float, score: int) -> None:
+    decision = decide_unverified(probability)
+
+    assert decision.risk_score == score
+    assert decision.classification == "unverified"
+    assert decision.recommended_action == "warn"

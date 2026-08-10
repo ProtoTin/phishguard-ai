@@ -2,7 +2,7 @@
 
 ## Model summary
 
-PhishGuard 0.4.0 contains two independent binary classification baselines:
+PhishGuard 0.5.0 contains two independent binary classification baselines:
 
 - An email-text classifier using word and character TF-IDF features with
   class-balanced logistic regression.
@@ -92,11 +92,15 @@ Each fitted baseline is frozen and calibrated with a sigmoid mapping on its
 validation split. No test labels are used to train the model or calibrator. The
 calibrated probability is rounded to a 0–100 risk score and mapped to four policy
 bands: allow (0–29), warn (30–59), quarantine (60–84), and block (85–100). Policy
-1.2 adds a documented probability ceiling for exact HTTPS hosts in the pinned
+2.0 adds a documented probability ceiling for exact HTTPS hosts in the pinned
 [Tranco W3779 top-1000 snapshot](https://tranco-list.eu/list/W3779/1000000).
 It does not trust lookalike domains, arbitrary subdomains, or a brand name that
 merely appears in a path. Bare domains such as `youtube.com` are normalized to HTTPS
 before scoring instead of being silently treated as HTTP.
+
+For unknown URL domains, model similarity alone cannot produce a phishing verdict.
+When no concrete indicator corroborates the model, policy 2.0 returns `unverified`,
+bounds the displayed score to 30–59, and recommends independent verification.
 
 On the external email test, calibration reduced expected calibration error from
 0.201642 to 0.170752 but increased Brier score from 0.131921 to 0.138143. This

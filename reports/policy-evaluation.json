@@ -1,9 +1,9 @@
 {
   "report_version": 1,
-  "project_version": "0.4.0",
+  "project_version": "0.5.0",
   "policy": {
-    "policy_version": "1.2.0",
-    "score_interpretation": "rounded calibrated phishing probability multiplied by 100, after documented exact-host mitigation",
+    "policy_version": "2.0.0",
+    "score_interpretation": "evidence-aware calibrated score; reputation and unverified-state safeguards prevent unsupported phishing verdicts",
     "advisory_only": true,
     "known_https_host_mitigation": {
       "match": "exact hostname after removing an optional www prefix",
@@ -16,6 +16,16 @@
       "snapshot_sha256": "a6643a3a179c11aa14db551e9595f7d4410528eadb02b0330b4893525bf6aa78",
       "host_count": 1000,
       "limitation": "Popularity reduces false positives but does not prove a page is safe."
+    },
+    "unverified_url_policy": {
+      "condition": "hostname absent from the offline reputation snapshot and no concrete phishing indicator detected",
+      "score_range": [
+        30,
+        59
+      ],
+      "classification": "unverified",
+      "action": "warn",
+      "limitation": "Live reputation and page contents are not checked."
     },
     "bands": [
       {
@@ -152,7 +162,7 @@
       "artifact": {
         "path": "artifacts/policy/email_calibrated.joblib",
         "bytes": 1807564,
-        "sha256": "74dd30393507ed5bbc781b0ee85f2001074b5517af0a1a001283dde2ff00b33a"
+        "sha256": "b9ac7c21336af089447305781cdf1cd40f865e88c8cfd8759b2a8e80fd8755cf"
       }
     },
     "url": {

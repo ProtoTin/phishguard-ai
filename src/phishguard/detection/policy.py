@@ -14,7 +14,7 @@ from phishguard.detection.reputation import (
     TRANCO_SOURCE_URL,
 )
 
-Classification = Literal["legitimate", "suspicious", "phishing"]
+Classification = Literal["legitimate", "unverified", "suspicious", "phishing"]
 RecommendedAction = Literal["allow", "warn", "quarantine", "block"]
 
 
@@ -40,7 +40,9 @@ class PolicyDecision:
     policy_version: str
 
 
-POLICY_VERSION = "1.2.0"
+POLICY_VERSION = "2.0.0"
+UNVERIFIED_MINIMUM_SCORE = 30
+UNVERIFIED_MAXIMUM_SCORE = 59
 POLICY_BANDS = (
     PolicyBand(
         0,
@@ -96,14 +98,33 @@ def decide(probability: float) -> PolicyDecision:
     raise RuntimeError(f"No policy band contains risk score {score}")
 
 
+def decide_unverified(probability: float) -> PolicyDecision:
+    """Return an uncertainty decision when URL-only evidence cannot support a verdict."""
+
+    score = min(
+        UNVERIFIED_MAXIMUM_SCORE,
+        max(UNVERIFIED_MINIMUM_SCORE, risk_score(probability)),
+    )
+    return PolicyDecision(
+        risk_score=score,
+        classification="unverified",
+        recommended_action="warn",
+        guidance=(
+            "The offline detector cannot verify this domain; confirm it through a trusted "
+            "source before entering sensitive information."
+        ),
+        policy_version=POLICY_VERSION,
+    )
+
+
 def policy_document() -> dict[str, object]:
     """Return the stable policy definition for JSON serialization."""
 
     return {
         "policy_version": POLICY_VERSION,
         "score_interpretation": (
-            "rounded calibrated phishing probability multiplied by 100, after documented "
-            "exact-host mitigation"
+            "evidence-aware calibrated score; reputation and unverified-state safeguards "
+            "prevent unsupported phishing verdicts"
         ),
         "advisory_only": True,
         "known_https_host_mitigation": {
@@ -117,6 +138,16 @@ def policy_document() -> dict[str, object]:
             "snapshot_sha256": TRANCO_SNAPSHOT_SHA256,
             "host_count": TRANCO_SNAPSHOT_SIZE,
             "limitation": "Popularity reduces false positives but does not prove a page is safe.",
+        },
+        "unverified_url_policy": {
+            "condition": (
+                "hostname absent from the offline reputation snapshot and no concrete "
+                "phishing indicator detected"
+            ),
+            "score_range": [UNVERIFIED_MINIMUM_SCORE, UNVERIFIED_MAXIMUM_SCORE],
+            "classification": "unverified",
+            "action": "warn",
+            "limitation": "Live reputation and page contents are not checked.",
         },
         "bands": [asdict(band) for band in POLICY_BANDS],
     }

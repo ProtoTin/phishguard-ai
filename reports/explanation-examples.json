@@ -54,8 +54,8 @@
         "contribution": -0.144601
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -134,8 +134,8 @@
         "contribution": -0.075217
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -199,8 +199,8 @@
         "contribution": -0.611751
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -264,8 +264,8 @@
         "contribution": -0.723548
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -329,8 +329,8 @@
         "contribution": -0.110428
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -394,8 +394,8 @@
         "contribution": -0.065998
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -464,8 +464,8 @@
         "contribution": -0.080626
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -529,8 +529,8 @@
         "contribution": -0.647588
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -594,8 +594,8 @@
         "contribution": -0.116546
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -659,8 +659,73 @@
         "contribution": -0.065998
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
+    "advisory_only": true,
+    "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
+  },
+  "url_unverified": {
+    "content_type": "url",
+    "classification": "unverified",
+    "risk_score": 59,
+    "calibrated_probability": 0.59,
+    "recommended_action": "warn",
+    "guidance": "The offline detector cannot verify this domain; confirm it through a trusted source before entering sensitive information.",
+    "reasons": [
+      "The domain is outside the offline reputation snapshot, and no live reputation check was performed."
+    ],
+    "evidence": [
+      {
+        "code": "unverified_domain",
+        "description": "The domain is outside the offline reputation snapshot, and no live reputation check was performed."
+      }
+    ],
+    "supporting_model_features": [
+      {
+        "feature": "URL property: character entropy",
+        "contribution": 8.911393
+      },
+      {
+        "feature": "URL property: url length",
+        "contribution": 0.631207
+      },
+      {
+        "feature": "URL property: hyphens",
+        "contribution": 0.332696
+      },
+      {
+        "feature": "URL property: path length",
+        "contribution": 0.275598
+      },
+      {
+        "feature": "path/query pattern: /ab",
+        "contribution": 0.178799
+      }
+    ],
+    "mitigating_model_features": [
+      {
+        "feature": "URL property: uses https",
+        "contribution": -10.594394
+      },
+      {
+        "feature": "URL property: hostname labels",
+        "contribution": -1.037084
+      },
+      {
+        "feature": "URL property: dots",
+        "contribution": -0.187571
+      },
+      {
+        "feature": "URL property: hostname length",
+        "contribution": -0.106893
+      },
+      {
+        "feature": "hostname pattern: ine",
+        "contribution": -0.077506
+      }
+    ],
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -734,8 +799,8 @@
         "contribution": -0.017725
       }
     ],
-    "model_version": "0.4.0",
-    "policy_version": "1.2.0",
+    "model_version": "0.5.0",
+    "policy_version": "2.0.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   }

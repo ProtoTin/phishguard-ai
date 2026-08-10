@@ -4,7 +4,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-Classification = Literal["legitimate", "suspicious", "phishing"]
+Classification = Literal["legitimate", "unverified", "suspicious", "phishing"]
 RecommendedAction = Literal["allow", "warn", "quarantine", "block"]
 
 

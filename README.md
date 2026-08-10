@@ -14,7 +14,7 @@ proportionate response.
 ## Project goals
 
 - Analyze pasted email content and standalone URLs without visiting links.
-- Return a `legitimate`, `suspicious`, or `phishing` classification.
+- Return a `legitimate`, `unverified`, `suspicious`, or `phishing` classification.
 - Provide a calibrated risk score from 0 to 100.
 - Explain the signals that influenced each result.
 - Recommend whether to allow, warn, quarantine, or block.
@@ -166,6 +166,10 @@ actual destination. A transparent exact-host safeguard based on pinned Tranco
 top-domain data reduces false positives for popular HTTPS domains without trusting
 lookalikes. Inputs without a scheme are analyzed as HTTPS and clearly disclosed.
 These actions are advisory and are not enforced.
+
+Unknown URL domains without concrete phishing evidence are labeled `unverified`
+instead of being declared phishing from statistical similarity alone. This is the
+expected offline behavior; live reputation is outside the current privacy boundary.
 
 ## Roadmap
 

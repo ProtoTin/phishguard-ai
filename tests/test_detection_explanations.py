@@ -148,3 +148,34 @@ def test_bare_youtube_domain_is_normalized_and_reputation_mitigated() -> None:
     assert TRANCO_TOP_DOMAINS["youtube.com"] == 8
     assert TRANCO_TOP_DOMAINS["youtu.be"] == 47
     assert len(TRANCO_TOP_DOMAINS) == 1_000
+
+
+def test_unknown_domain_without_concrete_evidence_is_unverified() -> None:
+    model = fitted_url_model()
+
+    result = explain("url", "https://new-business.example/about", model, FixedCalibratedModel(0.99))
+
+    evidence = result["evidence"]
+    assert isinstance(evidence, list)
+    assert result["risk_score"] == 59
+    assert result["classification"] == "unverified"
+    assert result["recommended_action"] == "warn"
+    assert "unverified_domain" in {item["code"] for item in evidence}
+
+
+def test_concrete_phishing_evidence_overrides_popular_domain_mitigation() -> None:
+    model = fitted_url_model()
+
+    result = explain(
+        "url",
+        "https://youtube.com/login/verify/password",
+        model,
+        FixedCalibratedModel(0.99),
+    )
+
+    evidence = result["evidence"]
+    assert isinstance(evidence, list)
+    assert result["risk_score"] == 99
+    assert result["classification"] == "phishing"
+    assert "suspicious_terms" in {item["code"] for item in evidence}
+    assert "popular_domain" not in {item["code"] for item in evidence}

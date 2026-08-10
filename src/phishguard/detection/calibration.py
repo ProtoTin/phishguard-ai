@@ -178,6 +178,7 @@ def write_markdown(report: dict[str, object], path: Path) -> None:
             "| ---: | --- | --- |",
             "| 0–29 | Legitimate | Allow with normal caution |",
             "| 30–59 | Suspicious | Warn and verify independently |",
+            "| 30–59 | Unverified URL | Warn; live status was not checked |",
             "| 60–84 | Phishing | Recommend quarantine and review |",
             "| 85–100 | Phishing | Recommend block or isolation |",
             "",
@@ -191,11 +192,19 @@ def write_markdown(report: dict[str, object], path: Path) -> None:
             "## URL false-positive safeguard",
             "",
             "The URL model vectorizes the true hostname separately from the path and query.",
-            "Policy 1.2 caps the score at 20 for exact HTTPS hosts in a pinned Tranco top-1000",
+            "Policy 2.0 caps the score at 20 for exact HTTPS hosts in a pinned Tranco top-1000",
             "snapshot (with an optional `www` prefix). The safeguard does not match lookalikes",
             "or arbitrary subdomains. A missing scheme is analyzed as HTTPS instead of silently",
             "being treated as HTTP. Regression examples cover LinkedIn and YouTube variants,",
             "plus malicious URLs containing those brands only inside their paths.",
+            "",
+            "## Unverified URL policy",
+            "",
+            "An unranked URL without a concrete phishing indicator is labeled `unverified`,",
+            "with its score constrained to 30–59. Model similarity alone cannot produce a",
+            "phishing verdict for an unknown domain. IP hosts, obscured hosts, and multiple",
+            "credential-related terms can corroborate a phishing result. This preserves",
+            "caution without presenting offline statistical similarity as live reputation.",
             "",
         ]
     )
@@ -286,6 +295,7 @@ def build_policy(
         "url_youtube_www": "https://www.youtube.com/watch?v=example",
         "url_youtube_short": "https://youtu.be/example",
         "url_youtube_lookalike": "https://evil.test/redirect/youtube.com/login/verify",
+        "url_unverified": "https://new-business.example/about",
         "url_high_risk": "http://192.0.2.10/login/verify-account/password",
     }
     examples = {
@@ -308,6 +318,7 @@ def build_policy(
         "url_youtube_www": ("legitimate",),
         "url_youtube_short": ("legitimate",),
         "url_youtube_lookalike": ("suspicious", "phishing"),
+        "url_unverified": ("unverified",),
         "url_high_risk": ("suspicious", "phishing"),
     }
     for name, allowed in expected_classifications.items():

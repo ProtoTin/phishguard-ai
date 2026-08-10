@@ -11,7 +11,7 @@ YouTube.
 
 ## Reproducible popularity source
 
-Policy 1.2 uses the first 1,000 pay-level domains from Tranco list `W3779`, generated on
+Policy 2.0 uses the first 1,000 pay-level domains from Tranco list `W3779`, generated on
 August 9, 2026. The list aggregates CrUX, Farsight, Majestic, Cloudflare Radar, and
 Cisco Umbrella rankings observed from July 11 through August 9, 2026. The project
 stores the domain and rank pairs in code so portfolio builds are deterministic.
@@ -24,6 +24,14 @@ stores the domain and rank pairs in code so portfolio builds are deterministic.
 Only an exact HTTPS hostname, after removing one optional `www` prefix, receives the
 mitigation. Arbitrary subdomains and lookalike domains do not match. Popularity is not
 a safety verdict: compromised popular sites and open redirects remain possible.
+
+## Unverified domains
+
+An unknown hostname without an IP host, obscuring `@` symbol, or multiple
+credential-related terms is classified as `unverified`. Its effective score is bounded
+to 30–59, and the user is told that no live reputation check occurred. Concrete
+phishing evidence can still produce a phishing verdict, including for a popular host;
+popularity never overrides corroborating warning signs.
 
 ## Missing schemes
 

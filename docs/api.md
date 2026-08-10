@@ -2,7 +2,7 @@
 
 ## Purpose
 
-PhishGuard 0.4.0 exposes calibrated email-text and URL analysis through FastAPI.
+PhishGuard 0.5.0 exposes calibrated email-text and URL analysis through FastAPI.
 All submitted values are treated as untrusted plain text. URL analysis is fully
 offline: the service does not resolve, retrieve, or visit the submitted address.
 Results are advisory and may be incorrect.
@@ -52,8 +52,8 @@ and parsed lexical properties.
 
 A successful response contains:
 
-- `classification`: `legitimate`, `suspicious`, or `phishing`
-- `risk_score`: calibrated integer score from 0 to 100
+- `classification`: `legitimate`, `unverified`, `suspicious`, or `phishing`
+- `risk_score`: evidence-aware integer score from 0 to 100
 - `recommended_action`: `allow`, `warn`, `quarantine`, or `block`
 - controlled reasons and directly observed evidence
 - supporting and mitigating linear-model features
@@ -63,6 +63,10 @@ A successful response contains:
 The response never includes the submitted email or URL. Analysis responses send
 `Cache-Control: no-store`, and the application does not add submitted content to
 its logs or persist it.
+
+For URLs, `unverified` means the hostname is outside the offline reputation snapshot
+and no concrete phishing indicator corroborated the model. Its risk score is bounded
+to 30–59 and the action is `warn`; this is uncertainty, not a phishing verdict.
 
 ## Input and failure behavior
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-PhishGuard 0.4.0 adds a responsive security-workbench interface at `/`. It is
+PhishGuard 0.5.0 adds a responsive security-workbench interface at `/`. It is
 served by the same FastAPI process as the analysis API, so the dashboard uses the
 real verified email and URL models without a separate proxy or mock service.
 
