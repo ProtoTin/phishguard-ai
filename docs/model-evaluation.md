@@ -31,6 +31,7 @@ not a precise estimate of production performance.
 
 ## Artifact safety
 
-Model binaries are generated locally and excluded from Git. Joblib artifacts use
-pickle-based loading and must never be loaded from an untrusted source. Their SHA-256
-digests and library versions are recorded in the JSON report.
+The four reviewed deployment binaries are versioned with the public repository.
+Joblib artifacts use pickle-based loading and must never be replaced with files from
+an untrusted source. Their SHA-256 digests and library versions are recorded in the
+JSON report and verified before loading.

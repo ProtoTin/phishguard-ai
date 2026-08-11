@@ -32,6 +32,9 @@ jobs:
           python -m pip install "pip-audit==2.10.1"
           pip-audit --requirement requirements.lock
 
+      - name: Verify packaged model artifacts
+        run: python scripts/verify_artifacts.py
+
       - name: Lint
         run: ruff check .
 

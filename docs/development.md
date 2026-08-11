@@ -40,9 +40,9 @@ Useful local endpoints:
 - Interactive API documentation: `http://localhost:8000/docs`
 - OpenAPI schema: `http://localhost:8000/openapi.json`
 
-Run the data preparation, model training, and detection-policy build before using
-the readiness or analysis endpoints. See the API guide for example requests and
-safe error behavior.
+A fresh clone includes the four reviewed deployment artifacts. Run the data
+preparation, training, and policy-build workflows only when reproducing or replacing
+them. See the API guide for example requests and safe error behavior.
 
 ## Quality checks
 
@@ -85,8 +85,9 @@ Build and start the API:
 docker compose up --build
 ```
 
-The Compose service mounts the locally generated, Git-ignored `artifacts/`
-directory read-only. Build the models and policy on the host before starting it.
+The image contains the four reviewed, digest-verified deployment artifacts, so a
+fresh clone is immediately ready. After intentionally retraining the models and
+policy, rebuild the image so it contains the new artifacts and recorded hashes.
 
 Stop it with:
 
@@ -103,5 +104,7 @@ and packaging tools are removed from the runtime image after installation.
 - Application code lives under `src/phishguard/`.
 - Tests mirror application behavior under `tests/`.
 - Long-lived documentation belongs under `docs/`.
-- Downloaded data and trained artifacts are not committed to Git.
+- Downloaded, raw, and processed datasets are never committed to Git.
+- Only the four reviewed deployment artifacts are versioned; future generated files
+  remain ignored by default.
 - Each phase should result in a focused pull request or release milestone.

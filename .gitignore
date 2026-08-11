@@ -33,7 +33,16 @@ AGENTS.md
 sources/
 
 # Project artifacts and local data
-artifacts/
+# Only the four reviewed deployment artifacts are versioned. Ignore future outputs by default.
+artifacts/*
+!artifacts/models/
+!artifacts/policy/
+artifacts/models/*
+artifacts/policy/*
+!artifacts/models/email_baseline.joblib
+!artifacts/models/url_baseline.joblib
+!artifacts/policy/email_calibrated.joblib
+!artifacts/policy/url_calibrated.joblib
 data/raw/
 data/interim/
 data/processed/

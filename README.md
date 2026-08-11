@@ -7,10 +7,9 @@ proportionate response.
 
 ![PhishGuard — Explainable phishing analysis](src/phishguard/static/og.png)
 
-> **Project status:** Phase 7 in progress — the dashboard and API now include
-> production-oriented request limits, inference timeouts, host validation,
-> dependency locking and auditing, and automated code scanning. Packaging the
-> verified model artifacts and publishing the live demo are the next checkpoints.
+> **Project status:** Phase 7 in progress — the hardened dashboard, API, and four
+> digest-verified model artifacts are packaged into a reproducible container.
+> Publishing and verifying the public demo are the next checkpoints.
 
 ## Project goals
 
@@ -103,8 +102,8 @@ uvicorn phishguard.main:app --reload
 
 Open `http://localhost:8000/` for the analysis dashboard, `/docs` for interactive
 API documentation, or `/ready` to verify that the hashed model artifacts are
-loaded. The data, model-training, and policy-build steps below must be run before
-analysis is ready.
+loaded. A fresh clone includes the four reviewed deployment artifacts; the data,
+training, and policy-build steps below are only required to reproduce or replace them.
 
 ### Run the checks
 
@@ -149,8 +148,9 @@ python scripts/train_models.py
 ```
 
 This trains separate email and URL classifiers, selects thresholds on validation
-data, evaluates untouched test data, and writes model artifacts under the
-Git-ignored `artifacts/` directory. Never load an untrusted model artifact.
+data, evaluates untouched test data, and writes model artifacts under `artifacts/`.
+The four reviewed deployment artifacts are versioned so public builds work without
+an external binary download. Never load or commit an untrusted model artifact.
 
 ## Build the explanation and prevention policy
 
@@ -184,6 +184,8 @@ expected offline behavior; live reputation is outside the current privacy bounda
   the lock file for published vulnerabilities.
 - GitHub Actions are pinned to immutable commits, while Dependabot and CodeQL
   monitor dependencies and source code.
+- CI and container builds load the four packaged model artifacts only after their
+  recorded sizes, SHA-256 digests, and runtime contracts are verified.
 
 These application limits protect a single process. A public deployment must add
 provider-level rate limiting and monitoring and configure its hostname through
@@ -205,8 +207,8 @@ provider-level rate limiting and monitoring and configure its hostname through
 
 This repository now provides a responsive dashboard and offline email and URL
 prediction endpoints with bounded inputs, verified artifacts, calibrated risk
-scoring, explanations, and an advisory response policy. Model-artifact packaging,
-provider-level rate limiting, public hosting, and a live demo remain open Phase 7
+scoring, explanations, an advisory response policy, and packaged verified artifacts.
+Provider-level rate limiting, public hosting, and a live demo remain open Phase 7
 checkpoints. There are no administrative endpoints; authentication will be required
 before adding any future administrative capability.
 

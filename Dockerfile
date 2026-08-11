@@ -33,6 +33,7 @@ WORKDIR /home/phishguard
 
 COPY --chown=phishguard:phishguard config/detection-policy.json ./config/detection-policy.json
 COPY --chown=phishguard:phishguard reports/model-evaluation.json ./reports/model-evaluation.json
+COPY --chown=phishguard:phishguard artifacts ./artifacts
 
 EXPOSE 8000
 
