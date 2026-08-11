@@ -10,9 +10,7 @@ services:
     healthCheckPath: /ready
     autoDeployTrigger: checksPass
     envVars:
-      - key: PORT
-        value: "8000"
       - key: PHISHGUARD_ENVIRONMENT
         value: production
       - key: PHISHGUARD_ALLOWED_HOSTS
-        value: phishguard-ai-prototin.onrender.com
+        value: phishguard-ai-prototin.onrender.com,localhost,127.0.0.1

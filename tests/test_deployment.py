@@ -17,6 +17,11 @@ def test_render_blueprint_matches_production_container() -> None:
     assert service["plan"] == "free"
     assert service["healthCheckPath"] == "/ready"
     assert service["autoDeployTrigger"] == "checksPass"
-    assert environment["PORT"] == "8000"
+    assert "PORT" not in environment
     assert environment["PHISHGUARD_ENVIRONMENT"] == "production"
-    assert environment["PHISHGUARD_ALLOWED_HOSTS"] == (f"{service['name']}.onrender.com")
+    allowed_hosts = environment["PHISHGUARD_ALLOWED_HOSTS"].split(",")
+    assert allowed_hosts == [
+        f"{service['name']}.onrender.com",
+        "localhost",
+        "127.0.0.1",
+    ]
