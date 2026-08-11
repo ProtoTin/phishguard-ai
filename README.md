@@ -1,16 +1,15 @@
 # AI Phishing Detection and Prevention System
 
 An explainable phishing-risk analysis system for email content and URLs. The
-project will combine machine-learning models with deterministic security rules
+project combines machine-learning models with deterministic security rules
 to identify suspicious messages, explain the warning signs, and recommend a
 proportionate response.
 
 ![PhishGuard — Explainable phishing analysis](src/phishguard/static/og.png)
 
-> **Project status:** Phase 7 final verification — the hardened dashboard, API,
+> **Project status:** Phase 7 complete — the hardened dashboard, API, Policy 2.1,
 > and four digest-verified model artifacts are live in a reproducible Render
-> deployment. Policy 2.1 is undergoing the final protected deployment and
-> production smoke-test checkpoint.
+> deployment. The public release passed the documented production smoke suite.
 
 **[Open the live PhishGuard demo](https://phishguard-ai-prototin.onrender.com/)**
 
@@ -87,6 +86,7 @@ Classification + score + reasons + recommended action
 - [Dashboard guide](docs/dashboard.md)
 - [Production hardening](docs/production-hardening.md)
 - [Public deployment](docs/deployment.md)
+- [Production verification report](docs/production-verification.md)
 
 ## Local development
 
@@ -224,7 +224,7 @@ inactivity and are intended here for portfolio demonstration.
 - [x] Add calibration, explanations, and prevention policies
 - [x] Expose the detector through a secure API
 - [x] Build a responsive web dashboard
-- [ ] Test, harden, package, and deploy the system
+- [x] Test, harden, package, and deploy the system
 - [ ] Compare the baseline with an advanced transformer or ensemble
 
 ## Current limitations
@@ -232,10 +232,11 @@ inactivity and are intended here for portfolio demonstration.
 This repository now provides a responsive dashboard and offline email and URL
 prediction endpoints with bounded inputs, verified artifacts, calibrated risk
 scoring, explanations, an advisory response policy, packaged verified artifacts,
-and a reproducible Render deployment definition. Provider-level distributed rate
-limiting and production monitoring are not included in the free demo. There are no
-administrative endpoints; authentication will be required before adding any future
-administrative capability.
+and a reproducible public Render deployment. The live release passed the versioned
+smoke suite, but provider-level distributed rate limiting and durable external
+monitoring are not included in the free demo. There are no administrative
+endpoints; authentication will be required before adding any future administrative
+capability.
 
 ## Responsible use
 

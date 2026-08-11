@@ -53,6 +53,9 @@ synthetic fixtures:
 python scripts/smoke_test_deployment.py
 ```
 
+The final Phase 7 run and exact release evidence are recorded in the
+[production verification report](production-verification.md).
+
 Then confirm that the dashboard loads, `youtube.com` is not classified as
 phishing, the reserved deceptive test URL receives a phishing/block result, the
 corroborated email fixture is not allowed, unexpected host headers are rejected,
