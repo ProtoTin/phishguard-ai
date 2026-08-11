@@ -90,17 +90,23 @@ sigmoid calibration rather than these model-selection thresholds.
 
 Each fitted baseline is frozen and calibrated with a sigmoid mapping on its
 validation split. No test labels are used to train the model or calibrator. The
-calibrated probability is rounded to a 0–100 risk score and mapped to four policy
+calibrated probability contributes to a 0–100 risk score mapped to four policy
 bands: allow (0–29), warn (30–59), quarantine (60–84), and block (85–100). Policy
-2.0 adds a documented probability ceiling for exact HTTPS hosts in the pinned
+2.1 retains a documented probability ceiling for exact HTTPS hosts in the pinned
 [Tranco W3779 top-1000 snapshot](https://tranco-list.eu/list/W3779/1000000).
 It does not trust lookalike domains, arbitrary subdomains, or a brand name that
 merely appears in a path. Bare domains such as `youtube.com` are normalized to HTTPS
 before scoring instead of being silently treated as HTTP.
 
 For unknown URL domains, model similarity alone cannot produce a phishing verdict.
-When no concrete indicator corroborates the model, policy 2.0 returns `unverified`,
+When no concrete indicator corroborates the model, policy 2.1 returns `unverified`,
 bounds the displayed score to 30–59, and recommends independent verification.
+
+For emails, Policy 2.1 applies a minimum warning score of 30 when controlled rules
+find a reviewed combination of corroborating evidence, such as urgency together
+with a credential request. This safeguard prevents a contradictory `allow` result
+without asserting that rule matches alone prove phishing. The calibrated model
+probability is reported separately from the evidence-aware score.
 
 On the external email test, calibration reduced expected calibration error from
 0.201642 to 0.170752 but increased Brier score from 0.131921 to 0.138143. This
@@ -142,6 +148,8 @@ and is more important than its high in-source validation score.
   compromised legitimate sites, images, QR codes, or adversarial wording.
 - Calibration is validation-specific and may not transfer to new campaigns,
   languages, time periods, or data sources.
+- The email evidence floor can warn on legitimate security notifications; users
+  should verify them through a separately obtained trusted channel.
 - A low score is not proof of safety.
 
 ## Fairness and privacy

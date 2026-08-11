@@ -46,9 +46,17 @@ curl --fail --show-error https://phishguard-ai-prototin.onrender.com/health
 curl --fail --show-error https://phishguard-ai-prototin.onrender.com/ready
 ```
 
+Run the repeatable, non-destructive smoke suite with the repository's public,
+synthetic fixtures:
+
+```bash
+python scripts/smoke_test_deployment.py
+```
+
 Then confirm that the dashboard loads, `youtube.com` is not classified as
-phishing, an obviously deceptive test URL receives a warning, unexpected host
-headers are rejected, and analysis responses include `Cache-Control: no-store`.
+phishing, the reserved deceptive test URL receives a phishing/block result, the
+corroborated email fixture is not allowed, unexpected host headers are rejected,
+and analysis responses include `Cache-Control: no-store`.
 
 ## Free-tier limitations
 

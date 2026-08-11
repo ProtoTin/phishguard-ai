@@ -45,6 +45,7 @@ the response are inserted with safe text operations rather than HTML rendering.
 
 ## Current boundary
 
-The dashboard is complete for local use and container deployment. Public hosting,
-production rate limiting, authentication decisions, and deployment monitoring
-belong to the next hardening and deployment phase.
+The dashboard is available through the public Render demo and the same reviewed
+container used locally. The free deployment uses process-local rate limiting and
+provider health checks; it does not claim distributed edge throttling, enterprise
+availability, or authentication for future administrative capabilities.

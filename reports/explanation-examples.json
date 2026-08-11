@@ -55,7 +55,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -135,7 +135,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -147,12 +147,12 @@
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (wikipedia.org)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
     ],
     "evidence": [
       {
         "code": "popular_domain",
-        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (wikipedia.org)."
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
       }
     ],
     "supporting_model_features": [
@@ -200,7 +200,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -212,12 +212,12 @@
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (linkedin.com)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
     ],
     "evidence": [
       {
         "code": "popular_domain",
-        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (linkedin.com)."
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
       }
     ],
     "supporting_model_features": [
@@ -265,7 +265,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -277,12 +277,12 @@
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (linkedin.com)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
     ],
     "evidence": [
       {
         "code": "popular_domain",
-        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (linkedin.com)."
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
       }
     ],
     "supporting_model_features": [
@@ -330,7 +330,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -395,7 +395,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -408,7 +408,7 @@
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
       "No scheme was provided, so the detector analyzed the URL as HTTPS.",
-      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtube.com)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
     ],
     "evidence": [
       {
@@ -417,7 +417,7 @@
       },
       {
         "code": "popular_domain",
-        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtube.com)."
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
       }
     ],
     "supporting_model_features": [
@@ -465,7 +465,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -477,12 +477,12 @@
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtube.com)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
     ],
     "evidence": [
       {
         "code": "popular_domain",
-        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtube.com)."
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
       }
     ],
     "supporting_model_features": [
@@ -530,7 +530,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -542,12 +542,12 @@
     "recommended_action": "allow",
     "guidance": "No strong phishing signal was detected; continue normal caution.",
     "reasons": [
-      "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtu.be)."
+      "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
     ],
     "evidence": [
       {
         "code": "popular_domain",
-        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list (youtu.be)."
+        "description": "The exact HTTPS hostname is in the pinned Tranco top-1000 list."
       }
     ],
     "supporting_model_features": [
@@ -595,7 +595,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -660,7 +660,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -725,7 +725,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   },
@@ -800,7 +800,7 @@
       }
     ],
     "model_version": "0.5.0",
-    "policy_version": "2.0.0",
+    "policy_version": "2.1.0",
     "advisory_only": true,
     "safety_note": "This advisory result can be wrong; verify important decisions through trusted channels."
   }

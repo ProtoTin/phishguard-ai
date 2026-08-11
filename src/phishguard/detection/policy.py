@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Collection
 from dataclasses import asdict, dataclass
 from typing import Literal
 
@@ -40,9 +41,16 @@ class PolicyDecision:
     policy_version: str
 
 
-POLICY_VERSION = "2.0.0"
+POLICY_VERSION = "2.1.0"
 UNVERIFIED_MINIMUM_SCORE = 30
 UNVERIFIED_MAXIMUM_SCORE = 59
+EMAIL_WARNING_MINIMUM_SCORE = 30
+EMAIL_WARNING_EVIDENCE_COMBINATIONS = (
+    frozenset({"urgent_language", "credential_request"}),
+    frozenset({"account_verification", "credential_request"}),
+    frozenset({"link_prompt", "credential_request"}),
+    frozenset({"urgent_language", "payment_request"}),
+)
 POLICY_BANDS = (
     PolicyBand(
         0,
@@ -117,16 +125,37 @@ def decide_unverified(probability: float) -> PolicyDecision:
     )
 
 
+def decide_email(probability: float, evidence_codes: Collection[str]) -> PolicyDecision:
+    """Prevent corroborated email warning signs from receiving an allow decision."""
+
+    codes = frozenset(evidence_codes)
+    if any(combination <= codes for combination in EMAIL_WARNING_EVIDENCE_COMBINATIONS):
+        return decide(max(probability, EMAIL_WARNING_MINIMUM_SCORE / 100))
+    return decide(probability)
+
+
 def policy_document() -> dict[str, object]:
     """Return the stable policy definition for JSON serialization."""
 
     return {
         "policy_version": POLICY_VERSION,
         "score_interpretation": (
-            "evidence-aware calibrated score; reputation and unverified-state safeguards "
-            "prevent unsupported phishing verdicts"
+            "evidence-aware calibrated score; conservative email and URL safeguards "
+            "prevent unsupported allow or phishing verdicts"
         ),
         "advisory_only": True,
+        "email_evidence_floor": {
+            "condition": "at least one reviewed combination of corroborating warning signs",
+            "minimum_score": EMAIL_WARNING_MINIMUM_SCORE,
+            "classification": "suspicious",
+            "action": "warn",
+            "combinations": [
+                sorted(combination) for combination in EMAIL_WARNING_EVIDENCE_COMBINATIONS
+            ],
+            "limitation": (
+                "The safeguard prevents an allow result but does not declare the email phishing."
+            ),
+        },
         "known_https_host_mitigation": {
             "match": "exact hostname after removing an optional www prefix",
             "maximum_probability": KNOWN_HOST_PROBABILITY_CAP,

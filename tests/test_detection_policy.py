@@ -3,8 +3,10 @@
 import pytest
 
 from phishguard.detection.policy import (
+    EMAIL_WARNING_MINIMUM_SCORE,
     POLICY_VERSION,
     decide,
+    decide_email,
     decide_unverified,
     policy_document,
     risk_score,
@@ -43,6 +45,9 @@ def test_policy_document_is_advisory_and_complete() -> None:
     assert isinstance(bands, list)
     assert bands[0]["minimum"] == 0
     assert bands[-1]["maximum"] == 100
+    email_floor = document["email_evidence_floor"]
+    assert isinstance(email_floor, dict)
+    assert email_floor["minimum_score"] == EMAIL_WARNING_MINIMUM_SCORE
 
 
 @pytest.mark.parametrize(("probability", "score"), [(0.01, 30), (0.45, 45), (0.99, 59)])
@@ -52,3 +57,18 @@ def test_unverified_decision_bounds_model_only_scores(probability: float, score:
     assert decision.risk_score == score
     assert decision.classification == "unverified"
     assert decision.recommended_action == "warn"
+
+
+def test_corroborated_email_evidence_prevents_allow_decision() -> None:
+    decision = decide_email(0.16, {"urgent_language", "credential_request"})
+
+    assert decision.risk_score == 30
+    assert decision.classification == "suspicious"
+    assert decision.recommended_action == "warn"
+
+
+def test_single_email_warning_sign_does_not_override_model() -> None:
+    decision = decide_email(0.16, {"urgent_language"})
+
+    assert decision.risk_score == 16
+    assert decision.classification == "legitimate"

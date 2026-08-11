@@ -1,7 +1,32 @@
 {
-  "policy_version": "2.0.0",
-  "score_interpretation": "evidence-aware calibrated score; reputation and unverified-state safeguards prevent unsupported phishing verdicts",
+  "policy_version": "2.1.0",
+  "score_interpretation": "evidence-aware calibrated score; conservative email and URL safeguards prevent unsupported allow or phishing verdicts",
   "advisory_only": true,
+  "email_evidence_floor": {
+    "condition": "at least one reviewed combination of corroborating warning signs",
+    "minimum_score": 30,
+    "classification": "suspicious",
+    "action": "warn",
+    "combinations": [
+      [
+        "credential_request",
+        "urgent_language"
+      ],
+      [
+        "account_verification",
+        "credential_request"
+      ],
+      [
+        "credential_request",
+        "link_prompt"
+      ],
+      [
+        "payment_request",
+        "urgent_language"
+      ]
+    ],
+    "limitation": "The safeguard prevents an allow result but does not declare the email phishing."
+  },
   "known_https_host_mitigation": {
     "match": "exact hostname after removing an optional www prefix",
     "maximum_probability": 0.2,
@@ -60,7 +85,7 @@
     "email": {
       "path": "artifacts/policy/email_calibrated.joblib",
       "bytes": 1807564,
-      "sha256": "f4c5726ca0dda0f496d48b3aef938ff57ca3cc247246dd65394058e93303fb3d"
+      "sha256": "01b931d15eb352900a978f297980654845a6bcf3104361a98fb6f232ecdc49b7"
     },
     "url": {
       "path": "artifacts/policy/url_calibrated.joblib",
