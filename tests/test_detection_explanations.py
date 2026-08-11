@@ -107,6 +107,25 @@ def test_explanation_falls_back_when_no_rule_evidence() -> None:
     assert result["reasons"]
 
 
+def test_corroborated_email_evidence_cannot_be_labeled_legitimate() -> None:
+    model = fitted_email_model()
+
+    result = explain(
+        "email",
+        (
+            "URGENT: Your payroll account is locked. Verify your password immediately at "
+            "the attached login page or access will be terminated."
+        ),
+        model,
+        FixedCalibratedModel(0.16),
+    )
+
+    assert result["calibrated_probability"] == 0.16
+    assert result["risk_score"] == 30
+    assert result["classification"] == "suspicious"
+    assert result["recommended_action"] == "warn"
+
+
 def test_known_https_host_caps_false_positive_but_not_lookalike() -> None:
     model = fitted_url_model()
 

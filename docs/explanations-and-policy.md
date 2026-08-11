@@ -29,13 +29,22 @@ dataset shift. The small external email test remains the most important warning:
 email scores may be overconfident on unfamiliar campaigns or writing styles.
 Actions are recommendations for a future interface, not automatic enforcement.
 
+## Email evidence safeguard
+
+Policy 2.1 prevents an `allow` result when deterministic checks find a
+reviewed combination of corroborating email warning signs, such as urgency
+together with a credential request. The minimum result is `suspicious` at
+30 with a warning action; this safeguard does not declare the email phishing.
+The calibrated model probability remains visible separately from the
+evidence-aware risk score.
+
 ## URL false-positive safeguard
 
 The URL model vectorizes the true hostname separately from the path and query.
-Policy 2.0 caps the score at 20 for exact HTTPS hosts in a pinned Tranco top-1000
-snapshot (with an optional `www` prefix). The safeguard does not match lookalikes
-or arbitrary subdomains. A missing scheme is analyzed as HTTPS instead of silently
-being treated as HTTP. Regression examples cover LinkedIn and YouTube variants,
+Policy 2.1 retains the score cap of 20 for exact HTTPS hosts in a pinned Tranco
+top-1000 snapshot (with an optional `www` prefix). The safeguard does not
+match lookalikes or arbitrary subdomains. A missing scheme is analyzed as HTTPS
+instead of silently being treated as HTTP. Regression examples cover LinkedIn and YouTube variants,
 plus malicious URLs containing those brands only inside their paths.
 
 ## Unverified URL policy

@@ -13,7 +13,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from phishguard import __version__
-from phishguard.detection.policy import decide, decide_unverified
+from phishguard.detection.policy import decide, decide_email, decide_unverified
 from phishguard.detection.reputation import (
     KNOWN_HOST_PROBABILITY_CAP,
     normalize_url_input,
@@ -131,7 +131,7 @@ def url_evidence(value: str) -> list[Evidence]:
         evidence.append(
             Evidence(
                 "popular_domain",
-                f"The exact HTTPS hostname is in the pinned Tranco top-1000 list ({known_host}).",
+                "The exact HTTPS hostname is in the pinned Tranco top-1000 list.",
             )
         )
     try:
@@ -274,7 +274,7 @@ def explain(
             evidence = [item for item in evidence if item.code != "popular_domain"]
             decision = decide(probability)
     else:
-        decision = decide(probability)
+        decision = decide_email(probability, [item.code for item in evidence])
     supporting, mitigating = feature_contributions(base_model, analysis_text)
     reasons = [item.description for item in evidence[:4]]
     if not reasons and supporting and decision.classification == "phishing":

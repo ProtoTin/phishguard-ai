@@ -71,6 +71,12 @@ For URLs, `unverified` means the hostname is outside the offline reputation snap
 and no concrete phishing indicator corroborated the model. Its risk score is bounded
 to 30–59 and the action is `warn`; this is uncertainty, not a phishing verdict.
 
+Policy 2.1 also prevents an `allow` result when deterministic email checks find a
+reviewed combination of corroborating warning signs, such as urgent language plus
+a credential request. The minimum result is `suspicious` with a warning action;
+the safeguard does not by itself declare the email phishing. The calibrated model
+probability remains separate from the evidence-aware risk score.
+
 ## Input and failure behavior
 
 - The complete HTTP request body is limited to 65,536 bytes, including for

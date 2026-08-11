@@ -7,10 +7,12 @@ proportionate response.
 
 ![PhishGuard — Explainable phishing analysis](src/phishguard/static/og.png)
 
-> **Project status:** Phase 7 in progress — the hardened dashboard, API, and four
-> digest-verified model artifacts are packaged into a reproducible container. A
-> reviewed Render Blueprint now defines the public demo; production deployment
-> and verification are the remaining checkpoints.
+> **Project status:** Phase 7 final verification — the hardened dashboard, API,
+> and four digest-verified model artifacts are live in a reproducible Render
+> deployment. Policy 2.1 is undergoing the final protected deployment and
+> production smoke-test checkpoint.
+
+**[Open the live PhishGuard demo](https://phishguard-ai-prototin.onrender.com/)**
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ProtoTin/phishguard-ai)
 
@@ -177,6 +179,12 @@ Unknown URL domains without concrete phishing evidence are labeled `unverified`
 instead of being declared phishing from statistical similarity alone. This is the
 expected offline behavior; live reputation is outside the current privacy boundary.
 
+For email analysis, Policy 2.1 prevents an `allow` result when deterministic
+checks find a reviewed combination of corroborating warning signs, such as urgent
+language plus a credential request. This conservative floor produces
+`suspicious/warn`, not an unsupported phishing declaration, and leaves the model's
+calibrated probability visible separately.
+
 ## Production security controls
 
 - Analysis requests are limited per network peer and return `429` with retry guidance.
@@ -190,10 +198,12 @@ expected offline behavior; live reputation is outside the current privacy bounda
   monitor dependencies and source code.
 - CI and container builds load the four packaged model artifacts only after their
   recorded sizes, SHA-256 digests, and runtime contracts are verified.
+- A repeatable public smoke suite checks health, readiness, defensive headers,
+  strict validation, a popular benign URL, and safe synthetic phishing fixtures.
 
-These application limits protect a single process. A public deployment must add
-provider-level rate limiting and monitoring and configure its hostname through
-`PHISHGUARD_ALLOWED_HOSTS`.
+These application limits protect a single process. A scaled or business-critical
+deployment must add provider-level rate limiting and monitoring and configure its
+hostname through `PHISHGUARD_ALLOWED_HOSTS`.
 
 ## Deploy the public demo
 
