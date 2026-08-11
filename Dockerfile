@@ -38,6 +38,6 @@ COPY --chown=phishguard:phishguard artifacts ./artifacts
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=2)"]
+  CMD ["python", "-c", "import os, urllib.request; urllib.request.urlopen(f\"http://127.0.0.1:{os.getenv('PORT', '8000')}/ready\", timeout=2)"]
 
-CMD ["uvicorn", "phishguard.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "phishguard.server"]

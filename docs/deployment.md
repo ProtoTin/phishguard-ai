@@ -24,14 +24,17 @@ is required.
 | Runtime | Docker | Reuses the reviewed production image |
 | Plan | Free | Avoids an ongoing charge for the portfolio demo |
 | Region | Oregon | Keeps the initial demo configuration explicit |
-| Port | `8000` | Matches the container listener and health check |
+| Port | Render-assigned `PORT` | Keeps the container listener and health check synchronized |
 | Health path | `/ready` | Confirms the API and verified artifacts are available |
 | Environment | `production` | Enables production-only response protections |
-| Allowed host | `phishguard-ai-prototin.onrender.com` | Rejects unexpected host headers |
+| Allowed hosts | Public hostname plus local loopback | Rejects unexpected hosts while allowing container health probes |
 | Auto-deploy | After checks pass | Prevents deployment before required GitHub checks succeed |
 
 If the service name or public hostname is changed, update
-`PHISHGUARD_ALLOWED_HOSTS` to the exact new hostname before deploying.
+`PHISHGUARD_ALLOWED_HOSTS` to the exact new hostname before deploying. Preserve
+`localhost` and `127.0.0.1` for the container's internal health probe.
+The container reads Render's assigned `PORT` at startup and defaults to `8000`
+for local use; the Blueprint intentionally does not override this platform value.
 
 ## Verification
 

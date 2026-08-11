@@ -199,9 +199,11 @@ provider-level rate limiting and monitoring and configure its hostname through
 
 The root-level `render.yaml` defines a free Render Docker service with production
 settings, an explicit host allowlist, deploys gated by passing GitHub checks, and
-the artifact-aware `/ready` health check. Use the **Deploy to Render** button above
-and follow the [deployment guide](docs/deployment.md). Free services can have a
-cold start after inactivity and are intended here for portfolio demonstration.
+the artifact-aware `/ready` health check. The container binds to the hosting
+platform's assigned `PORT` and retains port `8000` as its local default. Use the
+**Deploy to Render** button above and follow the
+[deployment guide](docs/deployment.md). Free services can have a cold start after
+inactivity and are intended here for portfolio demonstration.
 
 ## Roadmap
 
