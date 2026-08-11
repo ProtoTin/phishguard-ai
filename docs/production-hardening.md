@@ -34,6 +34,12 @@ limiter is intentionally local to one process. Monitor `/health` for liveness an
 `/ready` for verified model availability without sending private analysis input
 to logs or third-party telemetry.
 
+The portfolio deployment is defined in `render.yaml` and documented in
+`docs/deployment.md`. It uses Render's free Docker service and `/ready` health
+check. Its process-local limit is suitable for controlling this single-instance
+demo, but it does not satisfy the shared edge-throttling requirement for a scaled
+or business-critical deployment.
+
 The four trusted Joblib model artifacts total less than 10 MB and are versioned
 directly with the repository. This keeps public builds deterministic without Git
 LFS or unauthenticated release downloads. CI and the runtime verify their recorded

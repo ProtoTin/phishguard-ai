@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: phishguard-ai-prototin
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /ready
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: PHISHGUARD_ENVIRONMENT
+        value: production
+      - key: PHISHGUARD_ALLOWED_HOSTS
+        value: phishguard-ai-prototin.onrender.com
