@@ -9,7 +9,6 @@ htmlcov
 .pytest_cache
 .ruff_cache
 .env
-artifacts
 data
 docs
 tests

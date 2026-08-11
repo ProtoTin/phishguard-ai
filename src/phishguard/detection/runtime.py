@@ -36,9 +36,18 @@ def _artifact_model(metadata: object, context: str) -> BinaryProbabilisticModel:
     artifact = _mapping(metadata, context)
     path = artifact.get("path")
     digest = artifact.get("sha256")
-    if not isinstance(path, str) or not isinstance(digest, str):
-        raise TypeError(f"Expected {context} to contain path and sha256 strings")
-    return load_verified_model(Path(path), digest)
+    expected_bytes = artifact.get("bytes")
+    if (
+        not isinstance(path, str)
+        or not isinstance(digest, str)
+        or not isinstance(expected_bytes, int)
+        or isinstance(expected_bytes, bool)
+    ):
+        raise TypeError(f"Expected {context} to contain path, sha256, and bytes")
+    artifact_path = Path(path)
+    if artifact_path.stat().st_size != expected_bytes:
+        raise ValueError(f"Artifact size mismatch for {artifact_path}")
+    return load_verified_model(artifact_path, digest)
 
 
 @dataclass(frozen=True)
@@ -56,6 +65,8 @@ class DetectionEngine:
             json.loads(model_report_path.read_text(encoding="utf-8")), "model report"
         )
         policy = _mapping(json.loads(policy_path.read_text(encoding="utf-8")), "policy")
+        if model_report.get("project_version") != __version__:
+            raise ValueError("Model report project version does not match the running service")
         if policy.get("project_version") != __version__:
             raise ValueError("Policy project version does not match the running service")
         if policy.get("policy_version") != POLICY_VERSION:

@@ -2,7 +2,7 @@
 
 ## Phase 7 audit outcome
 
-The local quality suite passes linting, formatting, strict typing, 77 automated
+The local quality suite passes linting, formatting, strict typing, 79 automated
 tests, and the 90 percent coverage gate. The project also builds a Python wheel.
 The Phase 7 audit identified public-request abuse, long-running inference,
 dependency drift, CI supply-chain risk, and model-artifact delivery as the main
@@ -34,9 +34,11 @@ limiter is intentionally local to one process. Monitor `/health` for liveness an
 `/ready` for verified model availability without sending private analysis input
 to logs or third-party telemetry.
 
-The four trusted Joblib model artifacts are still excluded from Git. Selecting a
-verified delivery mechanism for those files is Phase 7.3; the public service must
-not be deployed until `/ready` succeeds with their recorded SHA-256 digests.
+The four trusted Joblib model artifacts total less than 10 MB and are versioned
+directly with the repository. This keeps public builds deterministic without Git
+LFS or unauthenticated release downloads. CI and the runtime verify their recorded
+sizes, SHA-256 digests, project-policy version, and load contract. Future generated
+artifacts remain ignored unless they are deliberately reviewed and allowlisted.
 
 ## Residual risks
 

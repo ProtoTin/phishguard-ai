@@ -31,6 +31,7 @@ def artifact(path: Path) -> dict[str, object]:
     joblib.dump(SerializableModel(), path)
     return {
         "path": str(path),
+        "bytes": path.stat().st_size,
         "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
     }
 
@@ -44,10 +45,11 @@ def runtime_files(tmp_path: Path) -> tuple[Path, Path, Path]:
     model_report.write_text(
         json.dumps(
             {
+                "project_version": __version__,
                 "tasks": {
                     "email": {"artifact": base_email},
                     "url": {"artifact": base_url},
-                }
+                },
             }
         )
     )
@@ -79,9 +81,17 @@ def test_runtime_loads_verified_artifacts_and_provider_caches(tmp_path: Path) ->
 
 def test_runtime_rejects_tampered_artifact(tmp_path: Path) -> None:
     model_report, policy, base_email_path = runtime_files(tmp_path)
-    base_email_path.write_bytes(b"tampered")
+    base_email_path.write_bytes(b"x" * base_email_path.stat().st_size)
 
     with pytest.raises(ValueError, match="digest mismatch"):
+        DetectionEngine.from_files(model_report, policy)
+
+
+def test_runtime_rejects_artifact_size_mismatch(tmp_path: Path) -> None:
+    model_report, policy, base_email_path = runtime_files(tmp_path)
+    base_email_path.write_bytes(b"tampered")
+
+    with pytest.raises(ValueError, match="size mismatch"):
         DetectionEngine.from_files(model_report, policy)
 
 
@@ -92,6 +102,16 @@ def test_runtime_rejects_version_mismatch(tmp_path: Path) -> None:
     policy.write_text(json.dumps(policy_data))
 
     with pytest.raises(ValueError, match="project version"):
+        DetectionEngine.from_files(model_report, policy)
+
+
+def test_runtime_rejects_model_report_version_mismatch(tmp_path: Path) -> None:
+    model_report, policy, _ = runtime_files(tmp_path)
+    report_data = json.loads(model_report.read_text())
+    report_data["project_version"] = "0.0.0"
+    model_report.write_text(json.dumps(report_data))
+
+    with pytest.raises(ValueError, match="Model report project version"):
         DetectionEngine.from_files(model_report, policy)
 
 

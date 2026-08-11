@@ -1,11 +1,11 @@
 {
   "report_version": 1,
-  "project_version": "0.4.0",
+  "project_version": "0.5.0",
   "seed": 20260806,
   "environment": {
     "python": "3.12.13",
     "scikit_learn": "1.9.0",
-    "numpy": "2.5.1"
+    "numpy": "2.5.2"
   },
   "tasks": {
     "email": {
@@ -13,7 +13,7 @@
       "training_samples": 23633,
       "validation_samples": 6033,
       "test_samples": 100,
-      "training_seconds": 50.748,
+      "training_seconds": 66.884,
       "selected_threshold": 0.56,
       "selection_metric": "maximum validation F1; recall then proximity to 0.5 break ties",
       "selection_f1": 0.992706,
@@ -56,8 +56,8 @@
           },
           "predicted_phishing": 36
         },
-        "validation_latency_ms_per_record": 1.555866,
-        "test_latency_ms_per_record": 0.148201
+        "validation_latency_ms_per_record": 1.548557,
+        "test_latency_ms_per_record": 0.148512
       },
       "rule_baseline": {
         "fixed_threshold": 0.5,
@@ -102,8 +102,8 @@
       },
       "artifact": {
         "path": "artifacts/models/email_baseline.joblib",
-        "bytes": 1807244,
-        "sha256": "d20cf5712dbab4a94d2800abc509fdcbd666b157fed0284285dac33fe2fad896"
+        "bytes": 1807245,
+        "sha256": "0409fd59fc95d832ecb84242e6ef46352f5302b8669eacc230ffdcb3dc30eb57"
       }
     },
     "url": {
@@ -111,7 +111,7 @@
       "training_samples": 161517,
       "validation_samples": 34680,
       "test_samples": 35143,
-      "training_seconds": 19.918,
+      "training_seconds": 19.022,
       "selected_threshold": 0.26,
       "selection_metric": "maximum validation F1; recall then proximity to 0.5 break ties",
       "selection_f1": 0.996621,
@@ -154,8 +154,8 @@
           },
           "predicted_phishing": 14655
         },
-        "validation_latency_ms_per_record": 0.079341,
-        "test_latency_ms_per_record": 0.080707
+        "validation_latency_ms_per_record": 0.078357,
+        "test_latency_ms_per_record": 0.080193
       },
       "rule_baseline": {
         "fixed_threshold": 0.5,

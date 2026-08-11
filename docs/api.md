@@ -10,9 +10,12 @@ Results are advisory and may be incorrect.
 The same endpoints power the dashboard at `/`; `/service` returns machine-readable
 service information.
 
-## Before starting
+## Starting the packaged service
 
-Reproduce the data, train the baseline models, and build the policy artifacts:
+A fresh clone contains the four reviewed deployment artifacts. Install the project
+and start Uvicorn; `/ready` verifies their recorded metadata and hashes before use.
+
+To reproduce or intentionally replace those artifacts, run the complete pipeline:
 
 ```bash
 python scripts/download_data.py
