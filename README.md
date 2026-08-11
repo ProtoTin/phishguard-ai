@@ -8,8 +8,11 @@ proportionate response.
 ![PhishGuard — Explainable phishing analysis](src/phishguard/static/og.png)
 
 > **Project status:** Phase 7 in progress — the hardened dashboard, API, and four
-> digest-verified model artifacts are packaged into a reproducible container.
-> Publishing and verifying the public demo are the next checkpoints.
+> digest-verified model artifacts are packaged into a reproducible container. A
+> reviewed Render Blueprint now defines the public demo; production deployment
+> and verification are the remaining checkpoints.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ProtoTin/phishguard-ai)
 
 ## Project goals
 
@@ -81,6 +84,7 @@ Classification + score + reasons + recommended action
 - [API guide](docs/api.md)
 - [Dashboard guide](docs/dashboard.md)
 - [Production hardening](docs/production-hardening.md)
+- [Public deployment](docs/deployment.md)
 
 ## Local development
 
@@ -191,6 +195,14 @@ These application limits protect a single process. A public deployment must add
 provider-level rate limiting and monitoring and configure its hostname through
 `PHISHGUARD_ALLOWED_HOSTS`.
 
+## Deploy the public demo
+
+The root-level `render.yaml` defines a free Render Docker service with production
+settings, an explicit host allowlist, deploys gated by passing GitHub checks, and
+the artifact-aware `/ready` health check. Use the **Deploy to Render** button above
+and follow the [deployment guide](docs/deployment.md). Free services can have a
+cold start after inactivity and are intended here for portfolio demonstration.
+
 ## Roadmap
 
 - [x] Define project scope and threat model
@@ -207,10 +219,11 @@ provider-level rate limiting and monitoring and configure its hostname through
 
 This repository now provides a responsive dashboard and offline email and URL
 prediction endpoints with bounded inputs, verified artifacts, calibrated risk
-scoring, explanations, an advisory response policy, and packaged verified artifacts.
-Provider-level rate limiting, public hosting, and a live demo remain open Phase 7
-checkpoints. There are no administrative endpoints; authentication will be required
-before adding any future administrative capability.
+scoring, explanations, an advisory response policy, packaged verified artifacts,
+and a reproducible Render deployment definition. Provider-level distributed rate
+limiting and production monitoring are not included in the free demo. There are no
+administrative endpoints; authentication will be required before adding any future
+administrative capability.
 
 ## Responsible use
 
