@@ -76,9 +76,17 @@ to 30–59 and the action is `warn`; this is uncertainty, not a phishing verdict
 - Empty, oversized-field, incorrectly typed, or extra fields return `422`.
 - Missing, changed, or version-incompatible model artifacts return a generic
   `503` without exposing local paths or loader details.
+- More than 30 analysis requests from one network peer within 60 seconds return
+  `429` with a `Retry-After` header. Both values are configurable.
+- Inference that exceeds the configured five-second deadline returns a generic
+  `504`; the submitted content is not included in the response.
+- Requests with a host outside `PHISHGUARD_ALLOWED_HOSTS` are rejected before
+  reaching an endpoint.
 - Artifact loading verifies the SHA-256 values in the versioned reports before
   invoking pickle-based Joblib deserialization. Only locally generated trusted
   artifacts should be used.
 
-Authentication, deployment-level rate limits, and multi-worker processing
-timeouts remain required before exposing the service publicly.
+The included rate limit is intentionally process-local. Public hosting must add an
+edge or provider-level limit so protection remains consistent across replicas.
+There are no administrative endpoints; authentication is required before any are
+introduced.

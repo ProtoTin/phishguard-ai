@@ -4,15 +4,17 @@ from collections.abc import Awaitable, Callable
 from html import escape
 from pathlib import Path
 
+from anyio import fail_after, to_thread
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from phishguard import __version__
 from phishguard.config import Settings, get_settings
 from phishguard.detection.policy import POLICY_VERSION
 from phishguard.detection.runtime import Analyzer, DetectionProvider, DetectionUnavailableError
-from phishguard.middleware import RequestBodyLimitMiddleware
+from phishguard.middleware import AnalysisRateLimitMiddleware, RequestBodyLimitMiddleware
 from phishguard.schemas import (
     AnalysisResponse,
     EmailAnalysisRequest,
@@ -44,6 +46,15 @@ def create_app(detector: Analyzer | None = None, settings: Settings | None = Non
         detector,
     )
     application.add_middleware(
+        TrustedHostMiddleware,
+        allowed_hosts=runtime_settings.allowed_host_list,
+    )
+    application.add_middleware(
+        AnalysisRateLimitMiddleware,
+        max_requests=runtime_settings.analysis_rate_limit,
+        window_seconds=runtime_settings.analysis_rate_window_seconds,
+    )
+    application.add_middleware(
         RequestBodyLimitMiddleware,
         max_bytes=runtime_settings.max_request_bytes,
     )
@@ -60,7 +71,11 @@ def create_app(detector: Analyzer | None = None, settings: Settings | None = Non
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
         response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+        response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        if runtime_settings.environment == "production":
+            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         if request.url.path.startswith("/v1/analyze/"):
             response.headers["Cache-Control"] = "no-store"
         if request.url.path == "/" or request.url.path.startswith("/assets/"):
@@ -82,6 +97,24 @@ def create_app(detector: Analyzer | None = None, settings: Settings | None = Non
                 status_code=503,
                 detail="Detection models are unavailable; build and verify local artifacts first",
             ) from None
+
+    async def run_analysis(detector: Analyzer, content_type: str, text: str) -> AnalysisResponse:
+        """Run bounded model inference without holding the event loop indefinitely."""
+
+        try:
+            with fail_after(runtime_settings.analysis_timeout_seconds):
+                result = await to_thread.run_sync(
+                    detector.analyze,
+                    content_type,
+                    text,
+                    abandon_on_cancel=True,
+                )
+        except TimeoutError:
+            raise HTTPException(
+                status_code=504,
+                detail="Analysis timed out; retry with shorter input",
+            ) from None
+        return AnalysisResponse.model_validate(result)
 
     @application.get("/", response_class=HTMLResponse, include_in_schema=False)
     def dashboard(request: Request) -> HTMLResponse:
@@ -128,13 +161,13 @@ def create_app(detector: Analyzer | None = None, settings: Settings | None = Non
         response_model_exclude_none=True,
         tags=["analysis"],
     )
-    def analyze_email(
+    async def analyze_email(
         payload: EmailAnalysisRequest,
         detector: Analyzer = Depends(require_detector),
     ) -> AnalysisResponse:
         """Analyze bounded email content as untrusted plain text."""
 
-        return AnalysisResponse.model_validate(detector.analyze("email", payload.content))
+        return await run_analysis(detector, "email", payload.content)
 
     @application.post(
         "/v1/analyze/url",
@@ -142,13 +175,13 @@ def create_app(detector: Analyzer | None = None, settings: Settings | None = Non
         response_model_exclude_none=True,
         tags=["analysis"],
     )
-    def analyze_url(
+    async def analyze_url(
         payload: URLAnalysisRequest,
         detector: Analyzer = Depends(require_detector),
     ) -> AnalysisResponse:
         """Analyze a URL string offline without resolving or visiting it."""
 
-        return AnalysisResponse.model_validate(detector.analyze("url", payload.url))
+        return await run_analysis(detector, "url", payload.url)
 
     return application
 

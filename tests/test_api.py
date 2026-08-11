@@ -1,6 +1,7 @@
 """Tests for bounded, advisory API endpoints and service status."""
 
 import asyncio
+import time
 from pathlib import Path
 from typing import Any
 
@@ -37,6 +38,14 @@ class FixedAnalyzer:
             "advisory_only": True,
             "safety_note": "This advisory result can be wrong.",
         }
+
+
+class SlowAnalyzer(FixedAnalyzer):
+    """Detector double that exceeds a deliberately short test timeout."""
+
+    def analyze(self, content_type: str, text: str) -> dict[str, object]:
+        time.sleep(0.05)
+        return super().analyze(content_type, text)
 
 
 def request(
@@ -78,6 +87,20 @@ def test_service_info_and_health() -> None:
     }
     assert health.headers["x-content-type-options"] == "nosniff"
     assert health.headers["referrer-policy"] == "no-referrer"
+
+
+def test_production_responses_include_transport_and_cross_origin_headers() -> None:
+    application = create_app(
+        detector=FixedAnalyzer(),
+        settings=Settings(environment="production"),
+    )
+
+    response = request(application, "GET", "/health")
+
+    assert response.status_code == 200
+    assert response.headers["strict-transport-security"] == ("max-age=31536000; includeSubDomains")
+    assert response.headers["cross-origin-opener-policy"] == "same-origin"
+    assert response.headers["cross-origin-resource-policy"] == "same-origin"
 
 
 def test_dashboard_and_assets_use_safe_browser_controls() -> None:
@@ -184,6 +207,55 @@ def test_chunked_body_cannot_bypass_request_size_limit() -> None:
     assert response.status_code == 413
     assert response.json() == {"detail": "Request body too large"}
     assert response.headers["x-content-type-options"] == "nosniff"
+
+
+def test_analysis_rate_limit_returns_retry_guidance_without_running_detector() -> None:
+    detector = FixedAnalyzer()
+    application = create_app(
+        detector=detector,
+        settings=Settings(
+            environment="test",
+            analysis_rate_limit=2,
+            analysis_rate_window_seconds=60,
+        ),
+    )
+
+    first = request(application, "POST", "/v1/analyze/url", json={"url": "example.com"})
+    second = request(application, "POST", "/v1/analyze/url", json={"url": "example.org"})
+    limited = request(application, "POST", "/v1/analyze/url", json={"url": "example.net"})
+
+    assert first.status_code == 200
+    assert second.status_code == 200
+    assert limited.status_code == 429
+    assert limited.json() == {"detail": "Analysis rate limit exceeded; retry later"}
+    assert limited.headers["retry-after"] == "60"
+    assert limited.headers["cache-control"] == "no-store"
+    assert len(detector.calls) == 2
+
+
+def test_analysis_timeout_returns_controlled_error() -> None:
+    application = create_app(
+        detector=SlowAnalyzer(),
+        settings=Settings(environment="test", analysis_timeout_seconds=0.01),
+    )
+
+    response = request(application, "POST", "/v1/analyze/email", json={"content": "hello"})
+
+    assert response.status_code == 504
+    assert response.json() == {"detail": "Analysis timed out; retry with shorter input"}
+    assert response.headers["cache-control"] == "no-store"
+
+
+def test_untrusted_host_is_rejected() -> None:
+    application = create_app(
+        detector=FixedAnalyzer(),
+        settings=Settings(environment="test", allowed_hosts="trusted.test"),
+    )
+
+    response = request(application, "GET", "/health")
+
+    assert response.status_code == 400
+    assert response.text == "Invalid host header"
 
 
 def test_missing_artifacts_return_safe_unavailable_error(tmp_path: Path) -> None:

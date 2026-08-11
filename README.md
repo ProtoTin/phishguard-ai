@@ -7,9 +7,10 @@ proportionate response.
 
 ![PhishGuard — Explainable phishing analysis](src/phishguard/static/og.png)
 
-> **Project status:** Phase 6 — responsive analysis dashboard connected to the
-> secure email and URL API, verified model artifacts, calibrated explanations,
-> and advisory actions. The models remain research baselines.
+> **Project status:** Phase 7 in progress — the dashboard and API now include
+> production-oriented request limits, inference timeouts, host validation,
+> dependency locking and auditing, and automated code scanning. Packaging the
+> verified model artifacts and publishing the live demo are the next checkpoints.
 
 ## Project goals
 
@@ -80,6 +81,7 @@ Classification + score + reasons + recommended action
 - [Explanation and prevention-policy evaluation](docs/explanations-and-policy.md)
 - [API guide](docs/api.md)
 - [Dashboard guide](docs/dashboard.md)
+- [Production hardening](docs/production-hardening.md)
 
 ## Local development
 
@@ -171,6 +173,22 @@ Unknown URL domains without concrete phishing evidence are labeled `unverified`
 instead of being declared phishing from statistical similarity alone. This is the
 expected offline behavior; live reputation is outside the current privacy boundary.
 
+## Production security controls
+
+- Analysis requests are limited per network peer and return `429` with retry guidance.
+- Inference is time-bounded and returns a controlled `504` response on timeout.
+- Request bodies and schema fields are bounded independently.
+- Explicit allowed hosts, restrictive browser headers, production HSTS, and
+  no-store analysis responses reduce common web exposure.
+- `requirements.lock` pins production dependencies with package hashes; CI audits
+  the lock file for published vulnerabilities.
+- GitHub Actions are pinned to immutable commits, while Dependabot and CodeQL
+  monitor dependencies and source code.
+
+These application limits protect a single process. A public deployment must add
+provider-level rate limiting and monitoring and configure its hostname through
+`PHISHGUARD_ALLOWED_HOSTS`.
+
 ## Roadmap
 
 - [x] Define project scope and threat model
@@ -187,8 +205,10 @@ expected offline behavior; live reputation is outside the current privacy bounda
 
 This repository now provides a responsive dashboard and offline email and URL
 prediction endpoints with bounded inputs, verified artifacts, calibrated risk
-scoring, explanations, and an advisory response policy. Authentication,
-distributed rate limiting, public hosting, and a live demo remain later phases.
+scoring, explanations, and an advisory response policy. Model-artifact packaging,
+provider-level rate limiting, public hosting, and a live demo remain open Phase 7
+checkpoints. There are no administrative endpoints; authentication will be required
+before adding any future administrative capability.
 
 ## Responsible use
 
