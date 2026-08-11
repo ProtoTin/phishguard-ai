@@ -64,6 +64,19 @@ Runtime settings use environment variables beginning with `PHISHGUARD_`. Copy
 `.env.example` to `.env` for local overrides. The `.env` file is ignored by Git
 and must never contain credentials that are committed to the repository.
 
+The main production controls are `PHISHGUARD_ALLOWED_HOSTS`,
+`PHISHGUARD_ANALYSIS_TIMEOUT_SECONDS`, `PHISHGUARD_ANALYSIS_RATE_LIMIT`, and
+`PHISHGUARD_ANALYSIS_RATE_WINDOW_SECONDS`. Allowed hosts are comma-separated and
+must include the deployment's public hostname.
+
+`requirements.lock` is the hashed production dependency lock generated from the
+`ml` extra. Regenerate it after an intentional dependency change with:
+
+```bash
+pip-compile --extra ml --strip-extras --generate-hashes \
+  --no-emit-index-url --output-file requirements.lock pyproject.toml
+```
+
 ## Docker workflow
 
 Build and start the API:
@@ -82,7 +95,8 @@ docker compose down
 ```
 
 The production image runs as a non-root user with a read-only filesystem in the
-Compose configuration.
+Compose configuration. Its dependencies are installed from `requirements.lock`,
+and packaging tools are removed from the runtime image after installation.
 
 ## Repository conventions
 

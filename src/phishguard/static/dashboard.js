@@ -181,9 +181,13 @@ async function analyze(event) {
       body: JSON.stringify({ [config.field]: value }),
     });
     if (!response.ok) {
-      const message = response.status === 503
-        ? "Detection models are not ready. Build the local artifacts, then try again."
-        : "The analysis could not be completed. Check the input and try again.";
+      const messages = {
+        429: "Too many analyses were requested. Wait a moment, then try again.",
+        503: "Detection models are not ready. Build the local artifacts, then try again.",
+        504: "The analysis took too long. Try again with shorter input.",
+      };
+      const message = messages[response.status]
+        || "The analysis could not be completed. Check the input and try again.";
       throw new Error(message);
     }
     const result = await response.json();

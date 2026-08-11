@@ -1,15 +1,18 @@
-FROM python:3.12-slim AS builder
+FROM python:3.12-slim@sha256:229a2c5bfa27522db7815ea81f9bed70af17ccb9de9fc7ad142b1877b5830d36 AS builder
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1
 
 WORKDIR /build
 
-COPY pyproject.toml README.md LICENSE ./
+COPY pyproject.toml requirements.lock README.md LICENSE ./
 COPY src ./src
-RUN python -m pip wheel --wheel-dir /wheels ".[ml]"
+RUN python -m pip install --upgrade "pip==26.2.1" \
+    && python -m pip wheel --require-hashes --wheel-dir /wheels \
+        --requirement requirements.lock \
+    && python -m pip wheel --no-deps --wheel-dir /wheels .
 
-FROM python:3.12-slim AS runtime
+FROM python:3.12-slim@sha256:229a2c5bfa27522db7815ea81f9bed70af17ccb9de9fc7ad142b1877b5830d36 AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -21,7 +24,8 @@ RUN groupadd --system phishguard \
     && useradd --system --gid phishguard --create-home phishguard
 
 COPY --from=builder /wheels /wheels
-RUN python -m pip install /wheels/*.whl \
+RUN python -m pip install --no-index --find-links=/wheels "phishguard-ai[ml]==0.5.0" \
+    && python -m pip uninstall --yes pip setuptools \
     && rm -rf /wheels
 
 USER phishguard
